@@ -3,7 +3,7 @@ package com.applidium.graphqlientdemo.di;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
-import com.applidium.graphqlientdemo.app.example.ui.ExampleViewContract;
+import com.applidium.graphqlientdemo.app.main.ui.MainViewContract;
 import com.applidium.graphqlientdemo.di.common.ApplicationComponent;
 import com.applidium.graphqlientdemo.di.common.DaggerApplicationComponent;
 import com.applidium.graphqlientdemo.di.common.PreferencesModule;
@@ -11,11 +11,11 @@ import com.applidium.graphqlientdemo.di.common.RepositoryModule;
 import com.applidium.graphqlientdemo.di.common.ServiceModule;
 import com.applidium.graphqlientdemo.di.crashes.CrashesComponent;
 import com.applidium.graphqlientdemo.di.crashes.CrashesModule;
-import com.applidium.graphqlientdemo.di.example.DaggerExampleComponent;
-import com.applidium.graphqlientdemo.di.example.ExampleComponent;
-import com.applidium.graphqlientdemo.di.example.ExampleModule;
 import com.applidium.graphqlientdemo.di.logging.LoggingComponent;
 import com.applidium.graphqlientdemo.di.logging.LoggingModule;
+import com.applidium.graphqlientdemo.di.main.DaggerMainComponent;
+import com.applidium.graphqlientdemo.di.main.MainComponent;
+import com.applidium.graphqlientdemo.di.main.MainModule;
 import com.applidium.graphqlientdemo.di.threading.ThreadingComponent;
 import com.applidium.graphqlientdemo.di.threading.ThreadingModule;
 import com.applidium.graphqlientdemo.di.trace.TracerModule;
@@ -65,11 +65,11 @@ public class ComponentManager {
         return safeReturn(crashesComponent);
     }
 
-    public static ExampleComponent getExampleComponent(ExampleViewContract viewContract) {
-        return DaggerExampleComponent
+    public static MainComponent getMainComponent(MainViewContract viewContract) {
+        return DaggerMainComponent
             .builder()
             .applicationComponent(getApplicationComponent())
-            .exampleModule(new ExampleModule(viewContract))
+            .mainModule(new MainModule(viewContract))
             .build();
     }
 

@@ -1,6 +1,6 @@
 package com.applidium.graphqlientdemo.di.common;
 
-import com.applidium.graphqlientdemo.core.boundary.ExampleRepository;
+import com.applidium.graphqlientdemo.core.boundary.UserRepository;
 import com.applidium.graphqlientdemo.di.crashes.CrashesComponent;
 import com.applidium.graphqlientdemo.di.crashes.CrashesModule;
 import com.applidium.graphqlientdemo.di.logging.LoggingComponent;
@@ -24,7 +24,7 @@ import dagger.Component;
 })
 public interface ApplicationComponent {
     Logger logger();
-    ExampleRepository exampleRepository();
+    UserRepository exampleRepository();
 
     LoggingComponent.Builder loggingComponentBuilder();
     CrashesComponent plus(CrashesModule module);

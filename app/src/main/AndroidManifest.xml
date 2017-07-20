@@ -16,13 +16,14 @@
         <!-- android:exported="true" -> https://code.google.com/p/android/issues/detail?id=82185 -->
         <activity
             android:exported="true"
-            android:name=".app.example.ui.activity.ExampleActivity"
+            android:name=".app.main.ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Preview"
+            android:theme="@style/AppTheme"
             />
+
         <activity-alias
             android:name=".Launcher"
-            android:targetActivity=".app.example.ui.activity.ExampleActivity"
+            android:targetActivity=".app.main.ui.activity.MainActivity"
             >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

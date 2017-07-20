@@ -1,7 +1,7 @@
 package com.applidium.graphqlientdemo.di.common;
 
-import com.applidium.graphqlientdemo.core.boundary.ExampleRepository;
-import com.applidium.graphqlientdemo.data.ExampleRepositoryImpl;
+import com.applidium.graphqlientdemo.core.boundary.UserRepository;
+import com.applidium.graphqlientdemo.data.ServiceUserRepository;
 
 import javax.inject.Singleton;
 
@@ -10,8 +10,9 @@ import dagger.Provides;
 
 @Module
 public class RepositoryModule {
-    @Provides @Singleton ExampleRepository provideExampleRepository(
-        ExampleRepositoryImpl exampleRepository
+    @Provides @Singleton
+    UserRepository provideExampleRepository(
+        ServiceUserRepository exampleRepository
     ) {
         return exampleRepository;
     }
