@@ -5,9 +5,13 @@ import android.view.ViewGroup;
 
 import com.applidium.graphqlientdemo.app.actions.model.ActionViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActionAdapter extends RecyclerView.Adapter<ActionViewHolder> {
 
     private ActionClickedListener listener;
+    private final List<ActionViewModel> dataSet = new ArrayList<>();
 
     public ActionAdapter(ActionClickedListener listener) {
         this.listener = listener;
@@ -15,19 +19,23 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionViewHolder> {
 
     @Override
     public ActionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // TODO (kelianclerc) 20/7/17
-        return null;
+        return ActionViewHolder.makeHolder(parent);
     }
 
     @Override
     public void onBindViewHolder(ActionViewHolder holder, int position) {
-        // TODO (kelianclerc) 20/7/17
+        holder.bind(dataSet.get(position), listener);
     }
 
     @Override
     public int getItemCount() {
-        // TODO (kelianclerc) 20/7/17
-        return 0;
+        return dataSet.size();
+    }
+
+    public void setContent(List<ActionViewModel> model) {
+        dataSet.clear();
+        dataSet.addAll(model);
+        notifyDataSetChanged();
     }
 
     public interface ActionClickedListener {
