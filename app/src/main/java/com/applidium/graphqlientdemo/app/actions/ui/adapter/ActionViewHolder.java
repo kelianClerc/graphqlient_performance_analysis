@@ -41,7 +41,7 @@ public class ActionViewHolder extends RecyclerView.ViewHolder {
         numberOfItem.setText(actionViewModel.numberOfItems());
         itemName.setText(actionViewModel.lastItemTitle());
         itemName.setCompoundDrawablesWithIntrinsicBounds(
-            actionViewModel.isDone() ? R.drawable.ic_item_ok : 0,
+            actionViewModel.isDone() ? R.drawable.ic_done : 0,
             0,
             0,
             0
