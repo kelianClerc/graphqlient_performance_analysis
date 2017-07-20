@@ -4,6 +4,7 @@ apply plugin: 'com.tmiyamon.config'
 apply plugin: 'com.archinamon.aspectj'
 apply from: '../quality/sonar.gradle'
 apply from: '../quality/jacoco.gradle'
+apply plugin: 'com.applidium.qlrequest'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -128,6 +129,9 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$versions.retrofit"
     compile "com.squareup.retrofit2:converter-gson:$versions.retrofit"
     compile "com.squareup.okhttp3:logging-interceptor:$versions.loggingInterceptor"
+
+    compile 'com.github.kelianClerc.graphlqlient_library:graphqlient:develop-SNAPSHOT'
+    compile 'com.github.kelianClerc.graphlqlient_library:gson:develop-SNAPSHOT'
 
     // DB
     apt "com.raizlabs.android:DBFlow-Compiler:$versions.dbFlow"

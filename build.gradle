@@ -11,12 +11,14 @@ buildscript {
         classpath "com.neenbedankt.gradle.plugins:android-apt:$pluginsVersion.androidApt"
         classpath "com.github.Archinamon:GradleAspectJ-Android:$pluginsVersion.androidAspectJ"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$pluginsVersion.sonarqubeGradle"
+        classpath 'com.github.kelianClerc:graphqlient_gradle_plugin:develop-SNAPSHOT'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
