@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Use the website "http://chir.ag/projects/name-that-color/" to name the colors -->
+    <color name="mine_shaft">#333333</color>
+    <color name="blue_whale">#03384e</color>
+    <color name="eastern_blue">#1b80b3</color>
+    <color name="chathams_blue">#135b80</color>
+    <color name="dust_gray">#999999</color>
+    <color name="silver">#cccccc</color>
+    <color name="white">#ffffff</color>
+</resources>

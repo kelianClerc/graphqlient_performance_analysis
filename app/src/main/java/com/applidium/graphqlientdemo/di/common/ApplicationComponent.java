@@ -1,0 +1,32 @@
+package com.applidium.graphqlientdemo.di.common;
+
+import com.applidium.graphqlientdemo.core.boundary.ExampleRepository;
+import com.applidium.graphqlientdemo.di.crashes.CrashesComponent;
+import com.applidium.graphqlientdemo.di.crashes.CrashesModule;
+import com.applidium.graphqlientdemo.di.logging.LoggingComponent;
+import com.applidium.graphqlientdemo.di.logging.LoggingModule;
+import com.applidium.graphqlientdemo.di.threading.ThreadingComponent;
+import com.applidium.graphqlientdemo.di.threading.ThreadingModule;
+import com.applidium.graphqlientdemo.di.trace.TracerModule;
+import com.applidium.graphqlientdemo.utils.logging.Logger;
+
+import javax.inject.Singleton;
+
+import dagger.Component;
+
+@Singleton
+@Component(modules = {
+    LoggingModule.class,
+    PreferencesModule.class,
+    ServiceModule.class,
+    TracerModule.class,
+    RepositoryModule.class
+})
+public interface ApplicationComponent {
+    Logger logger();
+    ExampleRepository exampleRepository();
+
+    LoggingComponent.Builder loggingComponentBuilder();
+    CrashesComponent plus(CrashesModule module);
+    ThreadingComponent plus(ThreadingModule module);
+}
