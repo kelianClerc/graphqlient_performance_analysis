@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.applidium.graphqlientdemo.app.actions.ui.ActionViewContract;
 import com.applidium.graphqlientdemo.app.main.ui.MainViewContract;
+import com.applidium.graphqlientdemo.app.users.ui.UsersViewContract;
 import com.applidium.graphqlientdemo.di.actions.ActionsComponent;
 import com.applidium.graphqlientdemo.di.actions.ActionsModule;
 import com.applidium.graphqlientdemo.di.actions.DaggerActionsComponent;
@@ -27,6 +28,9 @@ import com.applidium.graphqlientdemo.di.main.MainModule;
 import com.applidium.graphqlientdemo.di.threading.ThreadingComponent;
 import com.applidium.graphqlientdemo.di.threading.ThreadingModule;
 import com.applidium.graphqlientdemo.di.trace.TracerModule;
+import com.applidium.graphqlientdemo.di.users.DaggerUsersComponent;
+import com.applidium.graphqlientdemo.di.users.UsersComponent;
+import com.applidium.graphqlientdemo.di.users.UsersModule;
 
 import java.io.File;
 
@@ -136,6 +140,20 @@ public class ComponentManager {
             .builder()
             .applicationComponent(getApplicationComponent())
             .actionsModule(new ActionsModule(viewContract))
+            .contextModule(new ContextModule(context))
+            .fragmentManagerModule(new FragmentManagerModule(manager))
+            .build();
+    }
+
+    public static UsersComponent getUsersComponent(
+        Context context,
+        UsersViewContract viewContract,
+        FragmentManager manager
+    ) {
+        return DaggerUsersComponent
+            .builder()
+            .applicationComponent(getApplicationComponent())
+            .usersModule(new UsersModule(viewContract))
             .contextModule(new ContextModule(context))
             .fragmentManagerModule(new FragmentManagerModule(manager))
             .build();
