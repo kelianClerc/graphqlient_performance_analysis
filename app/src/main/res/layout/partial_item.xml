@@ -19,7 +19,7 @@
         android:textColor="@color/dust_gray"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/duration"
+        app:layout_constraintEnd_toStartOf="@+id/duration"
         app:layout_constraintStart_toStartOf="parent"
         />
     <TextView
