@@ -1,11 +1,19 @@
 package com.applidium.graphqlientdemo.di;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 
+import com.applidium.graphqlientdemo.app.actions.ui.ActionViewContract;
 import com.applidium.graphqlientdemo.app.main.ui.MainViewContract;
+import com.applidium.graphqlientdemo.di.actions.ActionsComponent;
+import com.applidium.graphqlientdemo.di.actions.ActionsModule;
+import com.applidium.graphqlientdemo.di.actions.DaggerActionsComponent;
 import com.applidium.graphqlientdemo.di.common.ApplicationComponent;
+import com.applidium.graphqlientdemo.di.common.ContextModule;
 import com.applidium.graphqlientdemo.di.common.DaggerApplicationComponent;
+import com.applidium.graphqlientdemo.di.common.FragmentManagerModule;
 import com.applidium.graphqlientdemo.di.common.PreferencesModule;
 import com.applidium.graphqlientdemo.di.common.RepositoryModule;
 import com.applidium.graphqlientdemo.di.common.ServiceModule;
@@ -65,11 +73,15 @@ public class ComponentManager {
         return safeReturn(crashesComponent);
     }
 
-    public static MainComponent getMainComponent(MainViewContract viewContract) {
+    public static MainComponent getMainComponent(MainViewContract viewContract, Context context, FragmentManager manager) {
+        FragmentManagerModule module = new FragmentManagerModule(manager);
+        ContextModule contextModule = new ContextModule(context);
         return DaggerMainComponent
             .builder()
             .applicationComponent(getApplicationComponent())
             .mainModule(new MainModule(viewContract))
+            .fragmentManagerModule(module)
+            .contextModule(contextModule)
             .build();
     }
 
@@ -113,5 +125,19 @@ public class ComponentManager {
     private static void fail() {
         String message = "ComponentManager.init() was not called on Application#onCreate()";
         throw new RuntimeException(message);
+    }
+
+    public static ActionsComponent getActionsComponent(
+        Context context,
+        ActionViewContract viewContract,
+        FragmentManager manager
+    ) {
+        return DaggerActionsComponent
+            .builder()
+            .applicationComponent(getApplicationComponent())
+            .actionsModule(new ActionsModule(viewContract))
+            .contextModule(new ContextModule(context))
+            .fragmentManagerModule(new FragmentManagerModule(manager))
+            .build();
     }
 }

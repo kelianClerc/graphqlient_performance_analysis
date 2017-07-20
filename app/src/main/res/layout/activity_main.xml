@@ -56,12 +56,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <TextView
-            android:id="@+id/readme"
+        <com.applidium.graphqlientdemo.app.common.FitWindowsFrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/unit_2"
-            style="@style/AppTextAppearance.Normal"
+            android:layout_height="match_parent"
             />
     </ScrollView>
 </LinearLayout>
