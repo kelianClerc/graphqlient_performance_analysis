@@ -1,7 +1,7 @@
 package com.applidium.graphqlientdemo.di.common;
 
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
-import com.applidium.graphqlientdemo.data.ServiceUserRepository;
+import com.applidium.graphqlientdemo.data.net.retrofit.ServiceUserRepository;
 
 import javax.inject.Singleton;
 
