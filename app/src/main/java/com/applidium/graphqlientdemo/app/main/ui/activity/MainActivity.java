@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.applidium.graphqlientdemo.R;
 import com.applidium.graphqlientdemo.app.common.BaseActivity;
@@ -73,8 +72,7 @@ public class MainActivity extends BaseActivity implements
     public void onTabSelected(TabLayout.Tab tab) {
         switch (tab.getPosition()) {
             case USER_LIST_TAB:
-                Toast.makeText(this, "Navigate to users", Toast.LENGTH_SHORT).show();
-                // TODO (kelianclerc) 20/7/17
+                presenter.onUserList();
                 break;
             case LAST_ACTION_TAB:
                 presenter.onActions();

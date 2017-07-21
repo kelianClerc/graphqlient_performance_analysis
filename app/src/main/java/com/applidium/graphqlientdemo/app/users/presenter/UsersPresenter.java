@@ -1,57 +1,32 @@
 package com.applidium.graphqlientdemo.app.users.presenter;
 
 import com.applidium.graphqlientdemo.app.common.Presenter;
+import com.applidium.graphqlientdemo.app.users.model.UserMapper;
 import com.applidium.graphqlientdemo.app.users.model.UserViewModel;
-import com.applidium.graphqlientdemo.app.users.model.UserViewModelBuilder;
 import com.applidium.graphqlientdemo.app.users.ui.UsersViewContract;
+import com.applidium.graphqlientdemo.core.interactor.users.GetUsersInteractor;
+import com.applidium.graphqlientdemo.core.interactor.users.GetUsersListener;
+import com.applidium.graphqlientdemo.core.interactor.users.UserResponse;
+import com.applidium.graphqlientdemo.utils.trace.Trace;
 
-import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
-public class UsersPresenter extends Presenter<UsersViewContract> {
-    @Inject UsersPresenter(UsersViewContract view) {
+public class UsersPresenter extends Presenter<UsersViewContract> implements GetUsersListener {
+    private final UserMapper userMapper;
+    private final GetUsersInteractor restInteractor;
+
+    @Inject UsersPresenter(UsersViewContract view, UserMapper userMapper, GetUsersInteractor
+        restInteractor) {
         super(view);
+        this.userMapper = userMapper;
+        this.restInteractor = restInteractor;
     }
 
     @Override
     public void start() {
-        doStub();
-    }
-
-    private void doStub() {
-        UserViewModel userViewModel = new UserViewModelBuilder()
-            .id("12")
-            .name("Kelian")
-            .age("22 ans")
-            .numberOfActions("0 post")
-            .build();
-        UserViewModel userViewModel1 = new UserViewModelBuilder()
-            .id("12")
-            .name("Robert")
-            .age("42 ans")
-            .numberOfActions("8 post")
-            .build();
-        UserViewModel userViewModel2 = new UserViewModelBuilder()
-            .id("12")
-            .name("Bran")
-            .age("12 ans")
-            .numberOfActions("5 post")
-            .build();
-        UserViewModel userViewModel3 = new UserViewModelBuilder()
-            .id("12")
-            .name("John")
-            .age("20 ans")
-            .numberOfActions("10 post")
-            .build();
-        UserViewModel userViewModel4 = new UserViewModelBuilder()
-            .id("12")
-            .name("Arya")
-            .age("8 ans")
-            .numberOfActions("25 post")
-            .build();
-
-        view.showUsers(Arrays.asList(userViewModel1, userViewModel2, userViewModel, userViewModel4, userViewModel3, userViewModel2, userViewModel, userViewModel4, userViewModel3));
+        restInteractor.execute(this);
     }
 
     @Override
@@ -61,5 +36,16 @@ public class UsersPresenter extends Presenter<UsersViewContract> {
 
     public void onUser(UserViewModel user) {
         // TODO (kelianclerc) 20/7/17 user
+    }
+
+    @Override @Trace @Deprecated
+    public void onUsersSuccess(List<UserResponse> response) {
+        List<UserViewModel> users = userMapper.mapList(response);
+        view.showUsers(users);
+    }
+
+    @Override @Trace @Deprecated
+    public void onUsersError(String errorMessage) {
+        // TODO (kelianclerc) 21/7/17
     }
 }
