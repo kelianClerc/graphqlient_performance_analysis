@@ -3,14 +3,18 @@ package com.applidium.graphqlientdemo.app.main.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.applidium.graphqlientdemo.R;
 import com.applidium.graphqlientdemo.app.common.BaseActivity;
+import com.applidium.graphqlientdemo.app.main.presenter.MainPresenter;
 import com.applidium.graphqlientdemo.app.main.ui.MainViewContract;
 import com.applidium.graphqlientdemo.di.ComponentManager;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,9 +28,12 @@ public class MainActivity extends BaseActivity implements
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tab_layout) TabLayout tabLayout;
 
+    @Inject MainPresenter presenter;
+
     @Override
     protected void injectDependencies() {
-        ComponentManager.getLoggingComponent().inject(this);
+        FragmentManager manager = getSupportFragmentManager();
+        ComponentManager.getMainComponent(this, this, manager).inject(this);
     }
 
     @Override
@@ -56,8 +63,7 @@ public class MainActivity extends BaseActivity implements
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.profile:
-                Toast.makeText(this, "Navigate to profile", Toast.LENGTH_SHORT).show();
-                // TODO (kelianclerc) 20/7/17
+                presenter.onProfile();
                 return true;
         }
         return false;
@@ -67,12 +73,11 @@ public class MainActivity extends BaseActivity implements
     public void onTabSelected(TabLayout.Tab tab) {
         switch (tab.getPosition()) {
             case USER_LIST_TAB:
-                Toast.makeText(this, "Navigate to user list", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Navigate to users", Toast.LENGTH_SHORT).show();
                 // TODO (kelianclerc) 20/7/17
                 break;
             case LAST_ACTION_TAB:
-                Toast.makeText(this, "Navigate to last actions", Toast.LENGTH_SHORT).show();
-                // TODO (kelianclerc) 20/7/17
+                presenter.onActions();
                 break;
         }
     }
