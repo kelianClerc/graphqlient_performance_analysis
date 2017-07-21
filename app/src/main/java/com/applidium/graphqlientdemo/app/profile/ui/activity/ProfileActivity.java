@@ -32,7 +32,7 @@ public class ProfileActivity extends BaseActivity implements
     ProfileViewContract, ActionAdapter.ActionClickedListener
 {
 
-    private static final int DEFAULT_USER_ID = 0;
+    private static final String DEFAULT_USER_ID = "0";
     public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -47,7 +47,7 @@ public class ProfileActivity extends BaseActivity implements
         return makeIntent(context, DEFAULT_USER_ID);
     }
 
-    public static Intent makeIntent(Context context, int userId) {
+    public static Intent makeIntent(Context context, String userId) {
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.putExtra(EXTRA_USER_ID, userId);
         return intent;

@@ -3,6 +3,7 @@ package com.applidium.graphqlientdemo.app.users.presenter;
 import com.applidium.graphqlientdemo.app.common.Presenter;
 import com.applidium.graphqlientdemo.app.users.model.UserMapper;
 import com.applidium.graphqlientdemo.app.users.model.UserViewModel;
+import com.applidium.graphqlientdemo.app.users.navigator.UsersNavigator;
 import com.applidium.graphqlientdemo.app.users.ui.UsersViewContract;
 import com.applidium.graphqlientdemo.core.interactor.users.GetUsersInteractor;
 import com.applidium.graphqlientdemo.core.interactor.users.GetUsersListener;
@@ -16,12 +17,15 @@ import javax.inject.Inject;
 public class UsersPresenter extends Presenter<UsersViewContract> implements GetUsersListener {
     private final UserMapper userMapper;
     private final GetUsersInteractor restInteractor;
+    private final UsersNavigator navigator;
 
-    @Inject UsersPresenter(UsersViewContract view, UserMapper userMapper, GetUsersInteractor
-        restInteractor) {
+    @Inject UsersPresenter(
+        UsersViewContract view, UserMapper userMapper, GetUsersInteractor
+        restInteractor, UsersNavigator navigator) {
         super(view);
         this.userMapper = userMapper;
         this.restInteractor = restInteractor;
+        this.navigator = navigator;
     }
 
     @Override
@@ -35,7 +39,7 @@ public class UsersPresenter extends Presenter<UsersViewContract> implements GetU
     }
 
     public void onUser(UserViewModel user) {
-        // TODO (kelianclerc) 20/7/17 user
+        navigator.navigateToUserProfile(user.id());
     }
 
     @Override @Trace @Deprecated
