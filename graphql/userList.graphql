@@ -1,0 +1,10 @@
+{
+    #-list-
+    users {
+        id,
+        name,
+        firstname,
+        #-type- Int
+        age
+    }
+}
