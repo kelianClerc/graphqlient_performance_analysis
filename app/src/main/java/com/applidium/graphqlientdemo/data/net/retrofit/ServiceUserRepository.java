@@ -8,6 +8,7 @@ import com.applidium.graphqlientdemo.core.error.exceptions.ServerException;
 import com.applidium.graphqlientdemo.core.error.exceptions.UnexpectedException;
 import com.applidium.graphqlientdemo.data.net.common.RequestManager;
 import com.applidium.graphqlientdemo.data.net.retrofit.mapper.RestUserMapper;
+import com.applidium.graphqlientdemo.data.net.retrofit.model.RestUserContent;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestUsersContent;
 import com.applidium.graphqlientdemo.utils.trace.Trace;
 
@@ -40,5 +41,12 @@ public class ServiceUserRepository implements UserRepository {
         Call<RestUsersContent> call = service.getUsers();
         RestUsersContent response = requestManager.tryToDoRequest(call);
         return restUserMapper.mapList(response.users());
+    }
+
+    @Override
+    public User getProfile(String userId) throws Exception {
+        Call<RestUserContent> call = service.getProfile(userId);
+        RestUserContent response = requestManager.tryToDoRequest(call);
+        return restUserMapper.map(response.user());
     }
 }

@@ -4,6 +4,7 @@ import io.norberg.automatter.AutoMatter;
 
 @AutoMatter
 public interface ActionResponse {
+    String id();
     String title();
     int numberOfSteps();
     String lastActionName();

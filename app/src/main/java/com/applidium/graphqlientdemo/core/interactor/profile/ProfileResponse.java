@@ -4,7 +4,8 @@ import io.norberg.automatter.AutoMatter;
 
 @AutoMatter
 public interface ProfileResponse {
+    String id();
     String name();
     String firstname();
-    String age();
+    int age();
 }

@@ -42,6 +42,10 @@ public class GetProfileInteractor {
 
     private ProfileResponse makeResponse(User users) {
         ProfileResponse result = new ProfileResponseBuilder()
+            .id(users.id())
+            .name(users.name())
+            .firstname(users.firstName())
+            .age(users.age())
             .build();
         return result;
     }

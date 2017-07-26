@@ -2,6 +2,7 @@ package com.applidium.graphqlientdemo.core.interactor.actions;
 
 import com.applidium.graphqlientdemo.core.boundary.ActionRepository;
 import com.applidium.graphqlientdemo.core.entity.Action;
+import com.applidium.graphqlientdemo.utils.threading.RunOnExecutionThread;
 import com.applidium.graphqlientdemo.utils.threading.RunOnPostExecutionThread;
 import com.applidium.graphqlientdemo.utils.trace.Trace;
 
@@ -20,9 +21,11 @@ public class GetActionsInteractor {
         this.repository = repository;
     }
 
+    @Trace @RunOnExecutionThread
     public void execute(String userId, GetActionsListener listener) {
         this.userId = userId;
         this.listener = listener;
+        tryToGetActions();
     }
 
     private void tryToGetActions() {
@@ -42,13 +45,15 @@ public class GetActionsInteractor {
     private List<ActionResponse> makeResponse(List<Action> actions) {
         List<ActionResponse> result = new ArrayList<>();
         for (Action action : actions) {
-            result.add(new ActionsResponseBuilder()
+            ActionResponse response = new ActionResponseBuilder()
+                .id(action.id())
                 .title(action.title())
                 .numberOfSteps(action.numberOfSteps())
                 .lastActionName(action.lastItem())
-                .duration(action.lastDuration())
                 .isDone(action.isDone())
-                .build());
+                .duration(action.lastDuration())
+                .build();
+            result.add(response);
         }
         return result;
     }

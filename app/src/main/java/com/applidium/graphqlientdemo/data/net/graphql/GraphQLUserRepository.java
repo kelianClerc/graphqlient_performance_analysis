@@ -6,6 +6,8 @@ import com.applidium.graphqlient.converter.gson.GsonConverterFactory;
 import com.applidium.graphqlient.exceptions.QLException;
 import com.applidium.graphqlientdemo.UserListRequest;
 import com.applidium.graphqlientdemo.UserListResponse;
+import com.applidium.graphqlientdemo.UserRequest;
+import com.applidium.graphqlientdemo.UserResponse;
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
 import com.applidium.graphqlientdemo.core.entity.User;
 import com.applidium.graphqlientdemo.data.net.graphql.mapper.QLUserMapper;
@@ -42,5 +44,12 @@ public class GraphQLUserRepository implements UserRepository {
         UserListRequest request = new UserListRequest();
         QLResponse<UserListResponse> response = graphql.send(request);
         return userMapper.mapList(response.getResponse().users());
+    }
+
+    @Override
+    public User getProfile(String userId) throws Exception {
+        UserRequest request = new UserRequest(userId);
+        QLResponse<UserResponse> response = graphql.send(request);
+        return userMapper.mapLight(response.getResponse().user());
     }
 }
