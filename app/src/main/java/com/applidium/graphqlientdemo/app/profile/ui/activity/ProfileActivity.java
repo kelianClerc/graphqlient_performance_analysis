@@ -18,10 +18,13 @@ import com.applidium.graphqlientdemo.app.actions.ui.adapter.ActionAdapter;
 import com.applidium.graphqlientdemo.app.common.BaseActivity;
 import com.applidium.graphqlientdemo.app.profile.model.ProfileViewModel;
 import com.applidium.graphqlientdemo.app.profile.model.ProfileViewModelBuilder;
+import com.applidium.graphqlientdemo.app.profile.presenter.ProfilePresenter;
 import com.applidium.graphqlientdemo.app.profile.ui.ProfileViewContract;
 import com.applidium.graphqlientdemo.di.ComponentManager;
 
 import java.util.Arrays;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +45,7 @@ public class ProfileActivity extends BaseActivity implements
     @BindView(R.id.age) TextView age;
 
     private ActionAdapter adapter;
+    @Inject ProfilePresenter presenter;
 
     public static Intent makeIntent(Context context) {
         return makeIntent(context, DEFAULT_USER_ID);
@@ -55,7 +59,7 @@ public class ProfileActivity extends BaseActivity implements
 
     @Override
     protected void injectDependencies() {
-        ComponentManager.getLoggingComponent().inject(this);
+        ComponentManager.getProfileComponent(this, this).inject(this);
     }
 
     @Override
