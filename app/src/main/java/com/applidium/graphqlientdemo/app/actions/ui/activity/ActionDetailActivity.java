@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.applidium.graphqlientdemo.R;
+import com.applidium.graphqlientdemo.app.actions.ui.ActionDetailViewContract;
 import com.applidium.graphqlientdemo.app.actions.ui.adapter.ItemAdapter;
 import com.applidium.graphqlientdemo.app.common.BaseActivity;
 import com.applidium.graphqlientdemo.di.ComponentManager;
@@ -17,7 +18,7 @@ import butterknife.ButterKnife;
 
 import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
-public class ActionDetailActivity extends BaseActivity {
+public class ActionDetailActivity extends BaseActivity implements ActionDetailViewContract {
 
     public static final String EXTRA_ACTION_ID = "EXTRA_ACTION_ID";
     @BindView(R.id.recycler) RecyclerView recyclerView;
@@ -31,7 +32,7 @@ public class ActionDetailActivity extends BaseActivity {
 
     @Override
     protected void injectDependencies() {
-        ComponentManager.getLoggingComponent().inject(this);
+        ComponentManager.getActionDetailComponent(this, this).inject(this);
     }
 
     @Override
