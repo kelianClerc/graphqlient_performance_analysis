@@ -1,6 +1,7 @@
 package com.applidium.graphqlientdemo.core.boundary;
 
 import com.applidium.graphqlient.exceptions.QLException;
+import com.applidium.graphqlientdemo.core.entity.User;
 import com.applidium.graphqlientdemo.core.error.exceptions.NetworkException;
 import com.applidium.graphqlientdemo.core.error.exceptions.ServerClientException;
 import com.applidium.graphqlientdemo.core.error.exceptions.ServerException;
@@ -11,4 +12,5 @@ import java.util.List;
 
 public interface UserRepository {
     List<com.applidium.graphqlientdemo.core.entity.User> getUsers() throws QLException, IOException, ServerClientException, UnexpectedException, NetworkException, ServerException;
+    User getProfile(String userId) throws Exception;
 }
