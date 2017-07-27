@@ -3,6 +3,7 @@ package com.applidium.graphqlientdemo.data.net.retrofit;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestActionContent;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestActionDetailContent;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestItemContent;
+import com.applidium.graphqlientdemo.data.net.retrofit.model.RestItemsContent;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestUserContent;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestUsersContent;
 
@@ -22,6 +23,11 @@ public interface GraphqldemoService {
     @GET("items/{item_id}")
     Call<RestItemContent> getItem(
         @Path("item_id") String id
+    );
+
+    @GET("actions/{action_id}/items")
+    Call<RestItemsContent> getItemList(
+        @Path("action_id") String actionId
     );
 
     @GET("users/{user_id}")

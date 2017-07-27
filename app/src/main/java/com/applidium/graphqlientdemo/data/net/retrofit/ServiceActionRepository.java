@@ -17,7 +17,7 @@ import com.applidium.graphqlientdemo.data.net.retrofit.model.RestActionContent;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestActionDetailContent;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestItem;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestItemContent;
-import com.applidium.graphqlientdemo.data.net.retrofit.model.RestItemId;
+import com.applidium.graphqlientdemo.data.net.retrofit.model.RestItemsContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,12 +71,10 @@ public class ServiceActionRepository implements ActionRepository {
         ActionDetailBuilder builder = new ActionDetailBuilder();
         RestAction action = response.action();
         builder.id(action.id()).title(action.title());
-        for (RestItemId itemId : action.items()) {
-            Call<RestItemContent> callItem = service.getItem(itemId.id());
-            RestItemContent itemResponse = requestManager.tryToDoRequest(callItem);
-            Item item = itemMapper.map(itemResponse.item());
-            builder.addItem(item);
-        }
+        Call<RestItemsContent> callItem = service.getItemList(actionId);
+        RestItemsContent itemResponse = requestManager.tryToDoRequest(callItem);
+        List<Item> item = itemMapper.mapList(itemResponse.items());
+        builder.items(item);
         return builder.build();
     }
 }
