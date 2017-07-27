@@ -8,10 +8,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.applidium.graphqlientdemo.R;
+import com.applidium.graphqlientdemo.app.actions.model.ActionDetailViewModel;
+import com.applidium.graphqlientdemo.app.actions.presenter.ActionDetailPresenter;
 import com.applidium.graphqlientdemo.app.actions.ui.ActionDetailViewContract;
 import com.applidium.graphqlientdemo.app.actions.ui.adapter.ItemAdapter;
 import com.applidium.graphqlientdemo.app.common.BaseActivity;
 import com.applidium.graphqlientdemo.di.ComponentManager;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +26,10 @@ public class ActionDetailActivity extends BaseActivity implements ActionDetailVi
 
     public static final String EXTRA_ACTION_ID = "EXTRA_ACTION_ID";
     @BindView(R.id.recycler) RecyclerView recyclerView;
+
+    @Inject ActionDetailPresenter presenter;
     private ItemAdapter adapter;
+    private String actionId;
 
     public static Intent makeIntent(Context context, String actionId) {
         Intent intent = new Intent(context, ActionDetailActivity.class);
@@ -36,10 +43,22 @@ public class ActionDetailActivity extends BaseActivity implements ActionDetailVi
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.onStart(actionId);
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupView();
         setupAdapter();
+        getActionId();
+    }
+
+    private void setupView() {
+        setContentView(R.layout.activity_action);
+        ButterKnife.bind(this);
     }
 
     private void setupAdapter() {
@@ -49,8 +68,18 @@ public class ActionDetailActivity extends BaseActivity implements ActionDetailVi
         recyclerView.setAdapter(adapter);
     }
 
-    private void setupView() {
-        setContentView(R.layout.activity_action);
-        ButterKnife.bind(this);
+    private void getActionId() {
+        Intent intent = getIntent();
+        actionId = intent.getStringExtra(EXTRA_ACTION_ID);
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+
+    }
+
+    @Override
+    public void showDetail(ActionDetailViewModel viewModel) {
+        adapter.setContent(viewModel.items());
     }
 }

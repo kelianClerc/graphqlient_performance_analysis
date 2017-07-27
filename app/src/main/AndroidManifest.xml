@@ -21,6 +21,7 @@
             android:theme="@style/AppTheme"
             />
         <activity android:name=".app.profile.ui.activity.ProfileActivity"/>
+        <activity android:name=".app.actions.ui.activity.ActionDetailActivity"/>
 
         <activity-alias
             android:name=".Launcher"

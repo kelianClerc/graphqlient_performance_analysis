@@ -35,6 +35,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         this.itemViewModel = itemViewModel;
         item.setText(itemViewModel.name());
+        duration.setText(itemViewModel.duration());
         item.setCompoundDrawablesWithIntrinsicBounds(
             (itemViewModel.isDone() ? R.drawable.ic_item_ok : 0), 0, 0, 0
         );
