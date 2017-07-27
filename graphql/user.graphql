@@ -1,0 +1,9 @@
+query User($id:ID!){
+    user(id:$id){
+        id,
+        name,
+        firstname,
+        #-type- Int;
+        age
+    }
+}

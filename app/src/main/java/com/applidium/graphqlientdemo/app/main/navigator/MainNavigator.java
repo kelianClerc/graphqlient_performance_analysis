@@ -8,6 +8,7 @@ import com.applidium.graphqlientdemo.R;
 import com.applidium.graphqlientdemo.app.actions.ui.fragment.ActionsFragment;
 import com.applidium.graphqlientdemo.app.common.FragmentNavigatorHelper;
 import com.applidium.graphqlientdemo.app.profile.ui.activity.ProfileActivity;
+import com.applidium.graphqlientdemo.app.users.ui.fragment.UsersFragment;
 
 import javax.inject.Inject;
 
@@ -30,7 +31,8 @@ public class MainNavigator {
     }
 
     public void navigateToUserList() {
-        // TODO (kelianclerc) 20/7/17
+        UsersFragment fragment = UsersFragment.makeFragment();
+        helper.switchToFragment(fragment);
     }
 
     public void navigateToActions() {

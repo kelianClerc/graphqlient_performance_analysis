@@ -9,19 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.applidium.graphqlientdemo.R;
 import com.applidium.graphqlientdemo.app.actions.model.ActionViewModel;
-import com.applidium.graphqlientdemo.app.actions.model.ActionViewModelBuilder;
 import com.applidium.graphqlientdemo.app.actions.ui.adapter.ActionAdapter;
 import com.applidium.graphqlientdemo.app.common.BaseActivity;
 import com.applidium.graphqlientdemo.app.profile.model.ProfileViewModel;
-import com.applidium.graphqlientdemo.app.profile.model.ProfileViewModelBuilder;
+import com.applidium.graphqlientdemo.app.profile.presenter.ProfilePresenter;
 import com.applidium.graphqlientdemo.app.profile.ui.ProfileViewContract;
 import com.applidium.graphqlientdemo.di.ComponentManager;
 
-import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +32,7 @@ public class ProfileActivity extends BaseActivity implements
     ProfileViewContract, ActionAdapter.ActionClickedListener
 {
 
-    private static final int DEFAULT_USER_ID = 0;
+    private static final String DEFAULT_USER_ID = "0";
     public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -40,14 +40,17 @@ public class ProfileActivity extends BaseActivity implements
     @BindView(R.id.firstname) TextView firstName;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.age) TextView age;
+    @BindView(R.id.empty) TextView empty;
 
     private ActionAdapter adapter;
+    private String userId = DEFAULT_USER_ID;
+    @Inject ProfilePresenter presenter;
 
     public static Intent makeIntent(Context context) {
         return makeIntent(context, DEFAULT_USER_ID);
     }
 
-    public static Intent makeIntent(Context context, int userId) {
+    public static Intent makeIntent(Context context, String userId) {
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.putExtra(EXTRA_USER_ID, userId);
         return intent;
@@ -55,7 +58,7 @@ public class ProfileActivity extends BaseActivity implements
 
     @Override
     protected void injectDependencies() {
-        ComponentManager.getLoggingComponent().inject(this);
+        ComponentManager.getProfileComponent(this, this).inject(this);
     }
 
     @Override
@@ -63,34 +66,7 @@ public class ProfileActivity extends BaseActivity implements
         super.onStart();
 
         // FIXME (kelianclerc) 20/7/17 remove
-        doStub();
-    }
-
-    private void doStub() {
-        ActionViewModel actionViewModel = new ActionViewModelBuilder()
-            .articleName("Tarte aux pommes")
-            .numberOfItems("4 étapes")
-            .lastItemTitle("Eplucher les pommes")
-            .lastItemDuration("4 min")
-            .isDone(false)
-            .build();
-
-        ActionViewModel actionViewModel1 = new ActionViewModelBuilder()
-            .articleName("Quiche")
-            .numberOfItems("8 étapes")
-            .lastItemTitle("Etaler la pate")
-            .lastItemDuration("1 min")
-            .isDone(true)
-            .build();
-
-        ProfileViewModel profileViewModel = new ProfileViewModelBuilder()
-            .actions(Arrays.asList(actionViewModel, actionViewModel1,actionViewModel, actionViewModel1,actionViewModel, actionViewModel1))
-            .name("CLERC")
-            .firstName("Kélian")
-            .age("22 ans")
-            .build();
-
-        showData(profileViewModel);
+        presenter.onStart(userId);
     }
 
     @Override
@@ -99,6 +75,12 @@ public class ProfileActivity extends BaseActivity implements
         setupView();
         setupToolbar();
         setupRecycler();
+        setupUserId();
+    }
+
+    private void setupUserId() {
+        Intent intent = getIntent();
+        userId = intent.getStringExtra(EXTRA_USER_ID);
     }
 
     private void setupView() {
@@ -134,8 +116,7 @@ public class ProfileActivity extends BaseActivity implements
 
     @Override
     public void onActionClicked(ActionViewModel action) {
-        // TODO (kelianclerc) 20/7/17
-        Toast.makeText(this, "Action clicked : " + action.articleName(), Toast.LENGTH_SHORT).show();
+        presenter.onAction(action.id());
     }
 
     @Override
@@ -144,10 +125,22 @@ public class ProfileActivity extends BaseActivity implements
     }
 
     @Override
-    public void showData(ProfileViewModel model) {
-        firstName.setText(model.firstName());
-        name.setText(model.name());
-        age.setText(model.age());
-        adapter.setContent(model.actions());
+    public void showData(List<ActionViewModel> model) {
+        shouldShowEmpty(model.size() == 0);
+        adapter.setContent(model);
     }
+
+    @Override
+    public void showProfile(ProfileViewModel viewModel) {
+        firstName.setText(viewModel.firstName());
+        name.setText(viewModel.name());
+        age.setText(viewModel.age());
+    }
+
+    public void shouldShowEmpty(Boolean isEmpty) {
+        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        empty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+    }
+
+
 }

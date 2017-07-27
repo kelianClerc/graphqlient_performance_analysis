@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/unit_1_2"
     android:background="@color/white"
     android:clickable="true"
@@ -13,7 +13,7 @@
     >
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
         >
@@ -21,30 +21,28 @@
             android:id="@+id/article_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="5"
             android:background="@color/eastern_blue"
             android:padding="@dimen/unit_2"
-            android:text="Nom de l'action"
+            android:text="Eius aut omnis voluptatem rerum consequatur quos aa"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/article_number"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
-            tools:layout_editor_absoluteX="4dp"
-            tools:layout_editor_absoluteY="29dp"
             />
         <TextView
             android:id="@+id/article_number"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/blue_whale"
-            android:padding="@dimen/unit_2"
             android:text="3 actions"
+            android:layout_marginBottom="8dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/article_name"
-            tools:layout_editor_absoluteX="291dp"
-            tools:layout_editor_absoluteY="29dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/article_name"
+            android:layout_marginTop="0dp"
+            android:gravity="center"
             />
         <TextView
             android:id="@+id/item_preview_label"
@@ -57,19 +55,38 @@
             android:textColor="@color/dust_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/article_name"
+            app:layout_constraintTop_toBottomOf="@id/article_number"
 
             />
-        <include
-            android:id="@+id/item"
-            layout="@layout/partial_item"
+        <TextView
+            android:id="@+id/item_name"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/unit_1_2"
+            android:drawableStart="@drawable/ic_item_ok"
+            android:gravity="center_vertical"
+            android:text="Item "
+            android:textColor="@color/dust_gray"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/duration"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_preview_label"
+            android:layout_marginBottom="@dimen/unit_2"
+            android:layout_marginTop="@dimen/unit_1"
+            android:layout_marginStart="@dimen/unit_2"
             app:layout_constraintBottom_toBottomOf="parent"
-
             />
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Duration : 12min"
+            app:layout_constraintBottom_toBottomOf="@id/item_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/unit_2"
+            app:layout_constraintTop_toTopOf="@id/item_name"
+            />
+
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

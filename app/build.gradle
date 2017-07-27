@@ -146,6 +146,7 @@ dependencies {
     compile "com.android.support:support-annotations:$versions.androidSupport"
     compile "net.hockeyapp.android:HockeySDK:$versions.hockeyApp"
     compile "com.android.support:multidex:$versions.multidex"
+    compile "com.google.guava:guava:$versions.guava" // needed by auto-matter-gson
 
     // Value objects
     provided "javax.annotation:javax.annotation-api:$versions.javax"

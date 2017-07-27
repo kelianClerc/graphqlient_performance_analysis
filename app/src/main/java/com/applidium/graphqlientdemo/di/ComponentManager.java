@@ -5,11 +5,16 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 
+import com.applidium.graphqlientdemo.app.actions.ui.ActionDetailViewContract;
 import com.applidium.graphqlientdemo.app.actions.ui.ActionViewContract;
 import com.applidium.graphqlientdemo.app.main.ui.MainViewContract;
+import com.applidium.graphqlientdemo.app.profile.ui.ProfileViewContract;
 import com.applidium.graphqlientdemo.app.users.ui.UsersViewContract;
+import com.applidium.graphqlientdemo.di.actions.ActionDetailComponent;
+import com.applidium.graphqlientdemo.di.actions.ActionDetailModule;
 import com.applidium.graphqlientdemo.di.actions.ActionsComponent;
 import com.applidium.graphqlientdemo.di.actions.ActionsModule;
+import com.applidium.graphqlientdemo.di.actions.DaggerActionDetailComponent;
 import com.applidium.graphqlientdemo.di.actions.DaggerActionsComponent;
 import com.applidium.graphqlientdemo.di.common.ApplicationComponent;
 import com.applidium.graphqlientdemo.di.common.ContextModule;
@@ -25,6 +30,9 @@ import com.applidium.graphqlientdemo.di.logging.LoggingModule;
 import com.applidium.graphqlientdemo.di.main.DaggerMainComponent;
 import com.applidium.graphqlientdemo.di.main.MainComponent;
 import com.applidium.graphqlientdemo.di.main.MainModule;
+import com.applidium.graphqlientdemo.di.profile.DaggerProfileComponent;
+import com.applidium.graphqlientdemo.di.profile.ProfileComponent;
+import com.applidium.graphqlientdemo.di.profile.ProfileModule;
 import com.applidium.graphqlientdemo.di.threading.ThreadingComponent;
 import com.applidium.graphqlientdemo.di.threading.ThreadingModule;
 import com.applidium.graphqlientdemo.di.trace.TracerModule;
@@ -156,6 +164,29 @@ public class ComponentManager {
             .usersModule(new UsersModule(viewContract))
             .contextModule(new ContextModule(context))
             .fragmentManagerModule(new FragmentManagerModule(manager))
+            .build();
+    }
+
+    public static ProfileComponent getProfileComponent(
+        ProfileViewContract viewContract,
+        Context context
+    ) {
+        return DaggerProfileComponent
+            .builder()
+            .applicationComponent(getApplicationComponent())
+            .profileModule(new ProfileModule(viewContract))
+            .contextModule(new ContextModule(context))
+            .build();
+    }
+
+    public static ActionDetailComponent getActionDetailComponent(
+        ActionDetailViewContract viewContract, Context context
+    ) {
+        return DaggerActionDetailComponent
+            .builder()
+            .applicationComponent(getApplicationComponent())
+            .actionDetailModule(new ActionDetailModule(viewContract))
+            .contextModule(new ContextModule(context))
             .build();
     }
 }
