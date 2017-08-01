@@ -49,12 +49,12 @@ public class ComponentManager {
     private static ThreadingComponent threadingComponent;
     private static CrashesComponent crashesComponent;
 
-    public static void init(SharedPreferences preferences, File cacheDirectory) {
+    public static void init(SharedPreferences preferences, File cacheDirectory, Context applicationContext) {
         LoggingModule loggingModule = new LoggingModule();
         PreferencesModule preferencesModule = new PreferencesModule(preferences);
         ServiceModule serviceModule = new ServiceModule(cacheDirectory);
         TracerModule tracerModule = new TracerModule();
-        RepositoryModule repositoryModule = new RepositoryModule();
+        RepositoryModule repositoryModule = new RepositoryModule(applicationContext);
         initApplicationComponent(
             loggingModule,
             preferencesModule,
