@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 public class GetUsersInteractor {
     private final UserRepository repository;
+    private String activityName;
     private GetUsersListener listener;
 
     @Inject
@@ -23,7 +24,8 @@ public class GetUsersInteractor {
 
     @Trace
     @RunOnExecutionThread
-    public void execute(GetUsersListener listener) {
+    public void execute(String activityName, GetUsersListener listener) {
+        this.activityName = activityName;
         this.listener = listener;
         tryToGetUsers();
     }
@@ -37,7 +39,7 @@ public class GetUsersInteractor {
     }
 
     private void getUsers() throws Exception {
-        List<User> account = repository.getUsers();
+        List<User> account = repository.getUsers(activityName);
         List<UserResponse> response = makeResponse(account);
         handleSuccess(response);
     }

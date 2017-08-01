@@ -37,7 +37,7 @@ public class ServiceUserRepository implements UserRepository {
     }
 
     @Override @Trace
-    public List<User> getUsers() throws IOException, ServerClientException, UnexpectedException, NetworkException, ServerException {
+    public List<User> getUsers(String activityName) throws IOException, ServerClientException, UnexpectedException, NetworkException, ServerException {
         Call<RestUsersContent> call = service.getUsers();
         RestUsersContent response = requestManager.tryToDoRequest(call);
         return restUserMapper.mapList(response.users());

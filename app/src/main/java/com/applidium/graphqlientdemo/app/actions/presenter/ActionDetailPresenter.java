@@ -12,6 +12,9 @@ import com.applidium.graphqlientdemo.utils.trace.Trace;
 import javax.inject.Inject;
 
 public class ActionDetailPresenter extends Presenter<ActionDetailViewContract> implements GetActionDetailListener {
+
+
+    public static final String ACTIVITY_NAME = "ActionDetailActivity";
     private String actionId;
     private final GetActionDetailInteractor interactor;
     private final ActionDetailViewModelMapper actionDetailMapper;
@@ -26,7 +29,7 @@ public class ActionDetailPresenter extends Presenter<ActionDetailViewContract> i
 
     @Override
     public void start() {
-        interactor.execute(actionId, this);
+        interactor.execute(actionId, ACTIVITY_NAME, this);
     }
 
     @Override @Trace

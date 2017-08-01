@@ -43,7 +43,7 @@ public class ServiceActionRepository implements ActionRepository {
     }
 
     @Override
-    public List<Action> getActions(String userId) throws
+    public List<Action> getActions(String userId, String activityName) throws
         ServerClientException, UnexpectedException, NetworkException, ServerException
     {
         Call<RestActionContent> call = service.getActions(userId);
@@ -63,7 +63,7 @@ public class ServiceActionRepository implements ActionRepository {
     }
 
     @Override
-    public ActionDetail getActionDetail(String actionId)
+    public ActionDetail getActionDetail(String actionId, String activityName)
         throws ServerClientException, UnexpectedException, NetworkException, ServerException
     {
         Call<RestActionDetailContent> call = service.getActionDetail(actionId);

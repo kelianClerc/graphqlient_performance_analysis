@@ -11,6 +11,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface UserRepository {
-    List<com.applidium.graphqlientdemo.core.entity.User> getUsers() throws QLException, IOException, ServerClientException, UnexpectedException, NetworkException, ServerException;
-    User getProfile(String userId) throws Exception;
+    List<com.applidium.graphqlientdemo.core.entity.User> getUsers(String activityName) throws QLException, IOException, ServerClientException, UnexpectedException, NetworkException, ServerException;
+    User getProfile(String userId, String activityName) throws Exception;
 }

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 public class GetProfileInteractor {
     private final UserRepository repository;
     private String userId;
+    private String activityName;
     private GetProfileListener listener;
 
     @Inject
@@ -20,8 +21,9 @@ public class GetProfileInteractor {
 
     @Trace
     @RunOnExecutionThread
-    public void execute(String userId, GetProfileListener listener) {
+    public void execute(String userId, String activityName, GetProfileListener listener) {
         this.userId = userId;
+        this.activityName = activityName;
         this.listener = listener;
         tryToGetProfile();
     }
@@ -35,7 +37,7 @@ public class GetProfileInteractor {
     }
 
     private void getProfile() throws Exception {
-        User profile = repository.getProfile(userId);
+        User profile = repository.getProfile(userId, activityName);
         ProfileResponse response = makeResponse(profile);
         handleSuccess(response);
     }

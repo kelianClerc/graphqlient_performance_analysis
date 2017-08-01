@@ -11,6 +11,7 @@ import javax.inject.Inject;
 public class GetActionDetailInteractor {
     private final ActionRepository repository;
     private String actionId;
+    private String activityName;
     private GetActionDetailListener listener;
 
     @Inject
@@ -20,8 +21,9 @@ public class GetActionDetailInteractor {
 
     @Trace
     @RunOnExecutionThread
-    public void execute(String actionId, GetActionDetailListener listener) {
+    public void execute(String actionId, String activityName, GetActionDetailListener listener) {
         this.actionId = actionId;
+        this.activityName = activityName;
         this.listener = listener;
         tryToGetActionDetail();
     }
@@ -35,7 +37,7 @@ public class GetActionDetailInteractor {
     }
 
     private void getActions() throws Exception {
-        ActionDetail profile = repository.getActionDetail(actionId);
+        ActionDetail profile = repository.getActionDetail(actionId, activityName);
         ActionDetailResponse response = makeResponse(profile);
         handleSuccess(response);
     }
