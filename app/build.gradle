@@ -132,8 +132,8 @@ dependencies {
     compile "com.squareup.retrofit2:converter-gson:$versions.retrofit"
     compile "com.squareup.okhttp3:logging-interceptor:$versions.loggingInterceptor"
 
-    compile 'com.github.kelianClerc.graphlqlient_library:graphqlient:develop-SNAPSHOT'
-    compile 'com.github.kelianClerc.graphlqlient_library:gson:develop-SNAPSHOT'
+    compile 'com.github.kelianClerc.graphlqlient_library:graphqlient:498b237d09'
+    compile 'com.github.kelianClerc.graphlqlient_library:gson:498b237d09'
 
     // DB
     apt "com.raizlabs.android:DBFlow-Compiler:$versions.dbFlow"
