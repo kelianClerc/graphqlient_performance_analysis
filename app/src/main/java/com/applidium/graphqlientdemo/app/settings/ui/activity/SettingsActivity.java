@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
+import butterknife.ButterKnife;
 
 public class SettingsActivity extends BaseActivity implements SettingsViewContract {
 
@@ -48,6 +49,7 @@ public class SettingsActivity extends BaseActivity implements SettingsViewContra
 
     private void setupView() {
         setContentView(R.layout.activity_settings);
+        ButterKnife.bind(this);
     }
 
     private void setupListeners() {
