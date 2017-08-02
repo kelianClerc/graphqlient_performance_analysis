@@ -6,15 +6,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.applidium.graphqlientdemo.R;
 import com.applidium.graphqlientdemo.app.common.BaseActivity;
+import com.applidium.graphqlientdemo.app.settings.presenter.SettingsPresenter;
 import com.applidium.graphqlientdemo.app.settings.ui.SettingsViewContract;
 import com.applidium.graphqlientdemo.di.ComponentManager;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 
 public class SettingsActivity extends BaseActivity implements SettingsViewContract {
 
@@ -23,13 +28,15 @@ public class SettingsActivity extends BaseActivity implements SettingsViewContra
     @BindView(R.id.graphql) RadioButton graphql;
     @BindView(R.id.radio_group) RadioGroup radioGroup;
 
+    @Inject SettingsPresenter presenter;
+
     public static Intent makeIntent(Context context) {
         return new Intent(context, SettingsActivity.class);
     }
 
     @Override
     protected void injectDependencies() {
-        ComponentManager.getLoggingComponent().inject(this);
+        ComponentManager.getSettingsComponent(this, this).inject(this);
     }
 
     @Override
@@ -54,5 +61,12 @@ public class SettingsActivity extends BaseActivity implements SettingsViewContra
                 onBackPressed();
             }
         };
+    }
+
+    @OnCheckedChanged({ R.id.rest, R.id.graphql })
+    public void onRadio(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            presenter.onSourceSet(rest.isChecked());
+        }
     }
 }

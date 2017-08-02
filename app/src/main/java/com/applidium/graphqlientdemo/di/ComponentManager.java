@@ -9,6 +9,7 @@ import com.applidium.graphqlientdemo.app.actions.ui.ActionDetailViewContract;
 import com.applidium.graphqlientdemo.app.actions.ui.ActionViewContract;
 import com.applidium.graphqlientdemo.app.main.ui.MainViewContract;
 import com.applidium.graphqlientdemo.app.profile.ui.ProfileViewContract;
+import com.applidium.graphqlientdemo.app.settings.ui.SettingsViewContract;
 import com.applidium.graphqlientdemo.app.users.ui.UsersViewContract;
 import com.applidium.graphqlientdemo.di.actions.ActionDetailComponent;
 import com.applidium.graphqlientdemo.di.actions.ActionDetailModule;
@@ -33,6 +34,9 @@ import com.applidium.graphqlientdemo.di.main.MainModule;
 import com.applidium.graphqlientdemo.di.profile.DaggerProfileComponent;
 import com.applidium.graphqlientdemo.di.profile.ProfileComponent;
 import com.applidium.graphqlientdemo.di.profile.ProfileModule;
+import com.applidium.graphqlientdemo.di.settings.DaggerSettingsComponent;
+import com.applidium.graphqlientdemo.di.settings.SettingsComponent;
+import com.applidium.graphqlientdemo.di.settings.SettingsModule;
 import com.applidium.graphqlientdemo.di.threading.ThreadingComponent;
 import com.applidium.graphqlientdemo.di.threading.ThreadingModule;
 import com.applidium.graphqlientdemo.di.trace.TracerModule;
@@ -186,6 +190,17 @@ public class ComponentManager {
             .builder()
             .applicationComponent(getApplicationComponent())
             .actionDetailModule(new ActionDetailModule(viewContract))
+            .contextModule(new ContextModule(context))
+            .build();
+    }
+
+    public static SettingsComponent getSettingsComponent(
+        SettingsViewContract viewContract, Context context
+    ) {
+        return DaggerSettingsComponent
+            .builder()
+            .applicationComponent(getApplicationComponent())
+            .settingsModule(new SettingsModule(viewContract))
             .contextModule(new ContextModule(context))
             .build();
     }
