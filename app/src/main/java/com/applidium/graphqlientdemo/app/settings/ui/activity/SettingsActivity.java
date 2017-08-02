@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,7 +21,6 @@ import com.applidium.graphqlientdemo.di.ComponentManager;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.OnCheckedChanged;
 import butterknife.ButterKnife;
 
 public class SettingsActivity extends BaseActivity implements SettingsViewContract {
@@ -28,6 +29,7 @@ public class SettingsActivity extends BaseActivity implements SettingsViewContra
     @BindView(R.id.rest) RadioButton rest;
     @BindView(R.id.graphql) RadioButton graphql;
     @BindView(R.id.radio_group) RadioGroup radioGroup;
+    @BindView(R.id.root_parent) ViewGroup root;
 
     @Inject SettingsPresenter presenter;
 
@@ -38,6 +40,12 @@ public class SettingsActivity extends BaseActivity implements SettingsViewContra
     @Override
     protected void injectDependencies() {
         ComponentManager.getSettingsComponent(this, this).inject(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.start();
     }
 
     @Override
@@ -54,6 +62,16 @@ public class SettingsActivity extends BaseActivity implements SettingsViewContra
 
     private void setupListeners() {
         toolbar.setNavigationOnClickListener(getNavigationListener());
+        rest.setOnCheckedChangeListener(getOnCheckChangeListener());
+    }
+
+    private CompoundButton.OnCheckedChangeListener getOnCheckChangeListener() {
+        return new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                presenter.onSourceSet(isChecked);
+            }
+        };
     }
 
     private View.OnClickListener getNavigationListener() {
@@ -65,10 +83,31 @@ public class SettingsActivity extends BaseActivity implements SettingsViewContra
         };
     }
 
-    @OnCheckedChanged({ R.id.rest, R.id.graphql })
-    public void onRadio(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            presenter.onSourceSet(rest.isChecked());
-        }
+    @Override
+    public void showSetError(String errorMessage) {
+        Snackbar.make(root, errorMessage, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showSetSuccess() {
+        Snackbar.make(root, "Source changed successfuly", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showGetError(String errorMessage) {
+        Snackbar.make(root, errorMessage, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setDefaultValue(boolean isRestChecked) {
+        Snackbar.make(root, "Default value is " + (isRestChecked ? "Rest" : "GraphQL"), Snackbar.LENGTH_SHORT).show();
+        checkDefault(isRestChecked);
+    }
+
+    private void checkDefault(boolean isRestChecked) {
+        rest.setOnCheckedChangeListener(null);
+        rest.setChecked(isRestChecked);
+        graphql.setChecked(!isRestChecked);
+        rest.setOnCheckedChangeListener(getOnCheckChangeListener());
     }
 }
