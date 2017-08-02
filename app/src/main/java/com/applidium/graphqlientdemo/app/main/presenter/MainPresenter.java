@@ -25,15 +25,15 @@ public class MainPresenter extends Presenter<MainViewContract> {
 
     }
 
-    public void onProfile() {
-        navigator.navigateToProfile();
-    }
-
     public void onUserList() {
         navigator.navigateToUserList();
     }
 
     public void onActions() {
         navigator.navigateToActions();
+    }
+
+    public void onSettings() {
+        navigator.navigateToSettings();
     }
 }
