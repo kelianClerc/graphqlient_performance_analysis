@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.applidium.graphqlientdemo.R;
 import com.applidium.graphqlientdemo.app.actions.model.ActionDetailViewModel;
@@ -26,6 +28,7 @@ public class ActionDetailActivity extends BaseActivity implements ActionDetailVi
 
     public static final String EXTRA_ACTION_ID = "EXTRA_ACTION_ID";
     @BindView(R.id.recycler) RecyclerView recyclerView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Inject ActionDetailPresenter presenter;
     private ItemAdapter adapter;
@@ -54,6 +57,20 @@ public class ActionDetailActivity extends BaseActivity implements ActionDetailVi
         setupView();
         setupAdapter();
         getActionId();
+        setupToolbar();
+    }
+
+    private void setupToolbar() {
+        toolbar.setNavigationOnClickListener(getNavigationListener());
+    }
+
+    private View.OnClickListener getNavigationListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        };
     }
 
     private void setupView() {
