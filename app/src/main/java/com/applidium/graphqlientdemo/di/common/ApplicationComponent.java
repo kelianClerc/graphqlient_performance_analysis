@@ -13,6 +13,7 @@ import com.applidium.graphqlientdemo.di.threading.ThreadingModule;
 import com.applidium.graphqlientdemo.di.trace.TracerModule;
 import com.applidium.graphqlientdemo.utils.logging.Logger;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -27,8 +28,10 @@ import dagger.Component;
 })
 public interface ApplicationComponent {
     Logger logger();
-    UserRepository exampleRepository();
-    ActionRepository actionsRepository();
+    @Named("rest") UserRepository exampleRepository();
+    @Named("graphql") UserRepository graphQLExampleRepository();
+    @Named("rest") ActionRepository actionsRepository();
+    @Named("graphql") ActionRepository graphQLActionsRepository();
     SourceRepository sourceRepository();
     LogRepository logRepository();
 

@@ -1,5 +1,6 @@
 package com.applidium.graphqlientdemo.core.interactor.profile;
 
+import com.applidium.graphqlientdemo.core.boundary.SourceRepository;
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
 import com.applidium.graphqlientdemo.core.entity.ResponseWithData;
 import com.applidium.graphqlientdemo.core.entity.User;
@@ -9,17 +10,27 @@ import com.applidium.graphqlientdemo.utils.threading.RunOnPostExecutionThread;
 import com.applidium.graphqlientdemo.utils.trace.Trace;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class GetProfileInteractor {
-    private final UserRepository repository;
+    private final UserRepository restRepository;
+    private final UserRepository graphqlRepository;
+    private final SourceRepository sourceRepository;
     private String userId;
     private String activityName;
     private GetProfileListener listener;
     private final LogRepository logRepository;
 
     @Inject
-    GetProfileInteractor(UserRepository repository, LogRepository logRepository) {
-        this.repository = repository;
+    GetProfileInteractor(
+        @Named("rest") UserRepository restRepository,
+        @Named("graphql") UserRepository graphqlRepository,
+        SourceRepository sourceRepository,
+        LogRepository logRepository
+    ) {
+        this.restRepository = restRepository;
+        this.graphqlRepository = graphqlRepository;
+        this.sourceRepository = sourceRepository;
         this.logRepository = logRepository;
     }
 
@@ -41,10 +52,12 @@ public class GetProfileInteractor {
     }
 
     private void getProfile() throws Exception {
-        ResponseWithData<User> profile = repository.getProfile(userId, activityName);
-        logRepository.writeLog(profile.logData());
-        ProfileResponse response = makeResponse(profile.data());
-        handleSuccess(response);
+        if (sourceRepository.getSelectedSource()) {
+            ResponseWithData<User> profile = restRepository.getProfile(userId, activityName);
+            logRepository.writeLog(profile.logData());
+            ProfileResponse response = makeResponse(profile.data());
+            handleSuccess(response);
+        }
     }
 
     private ProfileResponse makeResponse(User users) {

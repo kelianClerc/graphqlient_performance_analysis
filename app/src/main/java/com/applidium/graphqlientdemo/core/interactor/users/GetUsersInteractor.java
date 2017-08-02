@@ -1,5 +1,6 @@
 package com.applidium.graphqlientdemo.core.interactor.users;
 
+import com.applidium.graphqlientdemo.core.boundary.SourceRepository;
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
 import com.applidium.graphqlientdemo.core.entity.ResponseWithData;
 import com.applidium.graphqlientdemo.core.entity.User;
@@ -12,16 +13,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class GetUsersInteractor {
-    private final UserRepository repository;
+    private final UserRepository restRepository;
+    private final UserRepository graphqlRepository;
+    private final SourceRepository sourceRepository;
     private String activityName;
     private GetUsersListener listener;
     private final LogRepository logRepository;
 
     @Inject
-    GetUsersInteractor(UserRepository repository, LogRepository logRepository) {
-        this.repository = repository;
+    GetUsersInteractor(
+        @Named("rest") UserRepository restRepository,
+        @Named("graphql") UserRepository graphqlRepository,
+        SourceRepository sourceRepository,
+        LogRepository logRepository
+    ) {
+        this.restRepository = restRepository;
+        this.graphqlRepository = graphqlRepository;
+        this.sourceRepository = sourceRepository;
         this.logRepository = logRepository;
     }
 
@@ -42,10 +53,12 @@ public class GetUsersInteractor {
     }
 
     private void getUsers() throws Exception {
-        ResponseWithData<List<User>> account = repository.getUsers(activityName);
-        logRepository.writeLog(account.logData());
-        List<UserResponse> response = makeResponse(account.data());
-        handleSuccess(response);
+        if (sourceRepository.getSelectedSource()) {
+            ResponseWithData<List<User>> account = restRepository.getUsers(activityName);
+            logRepository.writeLog(account.logData());
+            List<UserResponse> response = makeResponse(account.data());
+            handleSuccess(response);
+        }
     }
 
     private List<UserResponse> makeResponse(List<User> users) {
