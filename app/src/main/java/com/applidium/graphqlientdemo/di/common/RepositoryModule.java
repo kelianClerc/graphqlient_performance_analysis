@@ -3,9 +3,11 @@ package com.applidium.graphqlientdemo.di.common;
 import android.content.Context;
 
 import com.applidium.graphqlientdemo.core.boundary.ActionRepository;
+import com.applidium.graphqlientdemo.core.boundary.SourceRepository;
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
 import com.applidium.graphqlientdemo.data.LogRepository;
 import com.applidium.graphqlientdemo.data.LogRepositoryImpl;
+import com.applidium.graphqlientdemo.data.net.ServiceSourceRepository;
 import com.applidium.graphqlientdemo.data.net.retrofit.ServiceActionRepository;
 import com.applidium.graphqlientdemo.data.net.retrofit.ServiceUserRepository;
 
@@ -36,6 +38,15 @@ public class RepositoryModule {
     ) {
         return exampleRepository;
     }
+
+
+    @Provides @Singleton
+    SourceRepository provideSourcesRepository(
+        ServiceSourceRepository exampleRepository
+    ) {
+        return exampleRepository;
+    }
+
 
     @Provides
     Context context() {
