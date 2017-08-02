@@ -75,7 +75,7 @@ public class GraphqldemoApplication extends Application {
     protected void setupGraph() {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         File cacheDirectory = getCacheDir();
-        ComponentManager.init(preferences, cacheDirectory);
+        ComponentManager.init(preferences, cacheDirectory, getApplicationContext());
     }
 
     private void setupDatabase() {

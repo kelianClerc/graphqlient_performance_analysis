@@ -8,6 +8,7 @@ import com.applidium.graphqlientdemo.Settings;
 import com.applidium.graphqlientdemo.data.net.retrofit.GraphqldemoService;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestError;
 import com.applidium.graphqlientdemo.utils.crashes.HockeyAppCrashManagerListener;
+import com.applidium.graphqlientdemo.utils.logging.InterceptorDataAnalysis;
 import com.applidium.graphqlientdemo.utils.logging.InterceptorLogger;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -84,6 +85,13 @@ public class ServiceModule {
         return interceptor;
     }
 
+    @Provides @Singleton @Named("data")
+    InterceptorDataAnalysis provideDataAnalysisInterceptor() {
+        InterceptorDataAnalysis interceptor = new InterceptorDataAnalysis();
+        return interceptor;
+    }
+
+
     private HttpLoggingInterceptor.Level getNetworkLogLevel() {
         return HttpLoggingInterceptor.Level.valueOf(LOG_NETWORK_LEVEL);
     }
@@ -99,6 +107,7 @@ public class ServiceModule {
     OkHttpClient provideClient(
         @Named("logging") HttpLoggingInterceptor loggingInterceptor,
         @Named("crashLogging") HttpLoggingInterceptor crashLogInterceptor,
+        @Named("data") InterceptorDataAnalysis interceptorDataAnalysis,
         @Nullable Cache cache
     ) {
         return new OkHttpClient.Builder()
@@ -108,6 +117,7 @@ public class ServiceModule {
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .addInterceptor(crashLogInterceptor)
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(interceptorDataAnalysis)
             .build();
     }
 

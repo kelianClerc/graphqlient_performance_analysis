@@ -1,31 +1,27 @@
 package com.applidium.graphqlientdemo.utils.logging;
 
-import android.content.Context;
-
 import org.joda.time.DateTime;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Response;
 
 public class DataAnalyzer {
     private String activityName;
-    private final Context context;
-    private long requestSent;
+    private long requestSent = 0;
     private long responseReceived;
-    private long requestSize;
-    private long responseSize;
+    private long tempRequestSent;
+    private long tempResponseReceived;
+    private long duration;
+    private long requestSize = 0;
+    private long responseSize = 0;
     private int roundTrip = 0;
     private int percent = 0;
     private RequestType requestType;
     private String label = "gen";
 
-    public DataAnalyzer(RequestType requestType, String activityName, Context context) {
+    private double salt;
+
+    public DataAnalyzer(RequestType requestType, String activityName) {
         this.requestType = requestType;
         this.activityName = activityName;
-        this.context = context;
+        salt = Math.floor(Math.random() * 10000000);
     }
 
     public void setActivityName(String activityName) {
@@ -33,47 +29,54 @@ public class DataAnalyzer {
     }
 
     public void setRequestSent() {
-        this.requestSent = DateTime.now().getMillis();
+        if (requestSent == 0) {
+            this.requestSent = DateTime.now().getMillis();
+        }
+        tempRequestSent = DateTime.now().getMillis();
+    }
+
+    public void setRequestSent(long time) {
+        if (requestSent == 0) {
+            this.requestSent = time;
+        }
+        tempRequestSent = time;
     }
 
     public void setResponseReceived() {
         this.responseReceived = DateTime.now().getMillis();
+        tempResponseReceived = responseReceived;
+        duration += tempResponseReceived - tempRequestSent;
     }
 
-    public <T> void mesureSize(Call<T> call, Response<T> response) {
-        try {
-            this.requestSize = call.request().body().contentLength();
-            this.responseSize = response.raw().body().contentLength();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setResponseReceived(long time) {
+        this.responseReceived = time;
+        tempResponseReceived = responseReceived;
+        duration += tempResponseReceived - tempRequestSent;
+    }
+
+    public void measureRequestSize(long length) {
+        this.requestSize += length;
+    }
+
+    public void measureResponseSize(long length) {
+        this.responseSize += length;
     }
 
     public void roundTrip() {
         this.roundTrip++;
     }
 
-    public void writeLog() {
-        String message = toString();
-        FileOutputStream outputStream;
-
-        try {
-            outputStream = context.openFileOutput("myfile", Context.MODE_PRIVATE);
-            outputStream.write(message.getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
     @Override
     public String toString() {
         int requestType = this.requestType == RequestType.GRAPHQL ? 2 : 1;
-        String message = activityName + " ###" + requestSent + "###" + responseReceived;
+        String message = activityName + "###" + requestSent + "###" + responseReceived + "###" + duration;
         message += "###" + requestSize + "###" + responseSize + "###" + roundTrip + "###";
-        message += percent + "###" + requestType + "###" + label;
+        message += percent + "###" + requestType + "###" + label + "\n";
 
         return message;
+    }
+
+    public double getSalt() {
+        return salt;
     }
 }
