@@ -1,7 +1,9 @@
 package com.applidium.graphqlientdemo.core.interactor.profile;
 
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
+import com.applidium.graphqlientdemo.core.entity.ResponseWithData;
 import com.applidium.graphqlientdemo.core.entity.User;
+import com.applidium.graphqlientdemo.data.LogRepository;
 import com.applidium.graphqlientdemo.utils.threading.RunOnExecutionThread;
 import com.applidium.graphqlientdemo.utils.threading.RunOnPostExecutionThread;
 import com.applidium.graphqlientdemo.utils.trace.Trace;
@@ -11,17 +13,21 @@ import javax.inject.Inject;
 public class GetProfileInteractor {
     private final UserRepository repository;
     private String userId;
+    private String activityName;
     private GetProfileListener listener;
+    private final LogRepository logRepository;
 
     @Inject
-    GetProfileInteractor(UserRepository repository) {
+    GetProfileInteractor(UserRepository repository, LogRepository logRepository) {
         this.repository = repository;
+        this.logRepository = logRepository;
     }
 
     @Trace
     @RunOnExecutionThread
-    public void execute(String userId, GetProfileListener listener) {
+    public void execute(String userId, String activityName, GetProfileListener listener) {
         this.userId = userId;
+        this.activityName = activityName;
         this.listener = listener;
         tryToGetProfile();
     }
@@ -35,8 +41,9 @@ public class GetProfileInteractor {
     }
 
     private void getProfile() throws Exception {
-        User profile = repository.getProfile(userId);
-        ProfileResponse response = makeResponse(profile);
+        ResponseWithData<User> profile = repository.getProfile(userId, activityName);
+        logRepository.writeLog(profile.logData());
+        ProfileResponse response = makeResponse(profile.data());
         handleSuccess(response);
     }
 

@@ -1,7 +1,11 @@
 package com.applidium.graphqlientdemo.di.common;
 
+import android.content.Context;
+
 import com.applidium.graphqlientdemo.core.boundary.ActionRepository;
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
+import com.applidium.graphqlientdemo.data.LogRepository;
+import com.applidium.graphqlientdemo.data.LogRepositoryImpl;
 import com.applidium.graphqlientdemo.data.net.retrofit.ServiceActionRepository;
 import com.applidium.graphqlientdemo.data.net.retrofit.ServiceUserRepository;
 
@@ -12,6 +16,13 @@ import dagger.Provides;
 
 @Module
 public class RepositoryModule {
+
+    private final Context context;
+
+    public RepositoryModule(Context context) {
+        this.context = context;
+    }
+
     @Provides @Singleton
     UserRepository provideExampleRepository(
         ServiceUserRepository exampleRepository
@@ -24,5 +35,15 @@ public class RepositoryModule {
         ServiceActionRepository exampleRepository
     ) {
         return exampleRepository;
+    }
+
+    @Provides
+    Context context() {
+        return context;
+    }
+
+    @Provides @Singleton
+    LogRepository provideLogRepository(LogRepositoryImpl instance) {
+        return instance;
     }
 }

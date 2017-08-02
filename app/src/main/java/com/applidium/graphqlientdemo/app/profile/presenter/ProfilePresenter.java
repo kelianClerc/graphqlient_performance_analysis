@@ -21,6 +21,8 @@ import javax.inject.Inject;
 
 public class ProfilePresenter extends Presenter<ProfileViewContract> implements GetProfileListener, GetActionsListener {
 
+
+    public static final String ACTIVITY_NAME = "ProfileActivity";
     private final GetProfileInteractor interactor;
     private final GetActionsInteractor actionsInteractor;
     private final ActionViewModelMapper actionMapper;
@@ -49,8 +51,8 @@ public class ProfilePresenter extends Presenter<ProfileViewContract> implements 
 
     @Override @Trace
     public void start() {
-        interactor.execute(userId, this);
-        actionsInteractor.execute(userId, this);
+        interactor.execute(userId, ACTIVITY_NAME, this);
+        actionsInteractor.execute(userId, ACTIVITY_NAME, this);
     }
 
     @Override

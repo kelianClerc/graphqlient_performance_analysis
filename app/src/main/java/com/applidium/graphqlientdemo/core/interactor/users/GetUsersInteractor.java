@@ -1,11 +1,12 @@
 package com.applidium.graphqlientdemo.core.interactor.users;
 
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
+import com.applidium.graphqlientdemo.core.entity.ResponseWithData;
+import com.applidium.graphqlientdemo.core.entity.User;
+import com.applidium.graphqlientdemo.data.LogRepository;
 import com.applidium.graphqlientdemo.utils.threading.RunOnExecutionThread;
 import com.applidium.graphqlientdemo.utils.threading.RunOnPostExecutionThread;
 import com.applidium.graphqlientdemo.utils.trace.Trace;
-
-import com.applidium.graphqlientdemo.core.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +15,20 @@ import javax.inject.Inject;
 
 public class GetUsersInteractor {
     private final UserRepository repository;
+    private String activityName;
     private GetUsersListener listener;
+    private final LogRepository logRepository;
 
     @Inject
-    GetUsersInteractor(UserRepository repository) {
+    GetUsersInteractor(UserRepository repository, LogRepository logRepository) {
         this.repository = repository;
+        this.logRepository = logRepository;
     }
 
     @Trace
     @RunOnExecutionThread
-    public void execute(GetUsersListener listener) {
+    public void execute(String activityName, GetUsersListener listener) {
+        this.activityName = activityName;
         this.listener = listener;
         tryToGetUsers();
     }
@@ -37,8 +42,9 @@ public class GetUsersInteractor {
     }
 
     private void getUsers() throws Exception {
-        List<User> account = repository.getUsers();
-        List<UserResponse> response = makeResponse(account);
+        ResponseWithData<List<User>> account = repository.getUsers(activityName);
+        logRepository.writeLog(account.logData());
+        List<UserResponse> response = makeResponse(account.data());
         handleSuccess(response);
     }
 

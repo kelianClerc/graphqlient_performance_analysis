@@ -15,6 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class UsersPresenter extends Presenter<UsersViewContract> implements GetUsersListener {
+    public static final String ACTIVITY_NAME = "UserFragment";
     private final UserMapper userMapper;
     private final GetUsersInteractor restInteractor;
     private final UsersNavigator navigator;
@@ -30,7 +31,7 @@ public class UsersPresenter extends Presenter<UsersViewContract> implements GetU
 
     @Override
     public void start() {
-        restInteractor.execute(this);
+        restInteractor.execute(ACTIVITY_NAME, this);
     }
 
     @Override

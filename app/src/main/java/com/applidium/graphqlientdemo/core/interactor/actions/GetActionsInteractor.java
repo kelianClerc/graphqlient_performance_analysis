@@ -2,6 +2,8 @@ package com.applidium.graphqlientdemo.core.interactor.actions;
 
 import com.applidium.graphqlientdemo.core.boundary.ActionRepository;
 import com.applidium.graphqlientdemo.core.entity.Action;
+import com.applidium.graphqlientdemo.core.entity.ResponseWithData;
+import com.applidium.graphqlientdemo.data.LogRepository;
 import com.applidium.graphqlientdemo.utils.threading.RunOnExecutionThread;
 import com.applidium.graphqlientdemo.utils.threading.RunOnPostExecutionThread;
 import com.applidium.graphqlientdemo.utils.trace.Trace;
@@ -13,17 +15,21 @@ import javax.inject.Inject;
 
 public class GetActionsInteractor {
     private final ActionRepository repository;
+    private final LogRepository logRepository;
     private String userId;
+    private String activityName;
     private GetActionsListener listener;
 
     @Inject
-    GetActionsInteractor(ActionRepository repository) {
+    GetActionsInteractor(ActionRepository repository, LogRepository logRepository) {
         this.repository = repository;
+        this.logRepository = logRepository;
     }
 
     @Trace @RunOnExecutionThread
-    public void execute(String userId, GetActionsListener listener) {
+    public void execute(String userId, String activityName, GetActionsListener listener) {
         this.userId = userId;
+        this.activityName = activityName;
         this.listener = listener;
         tryToGetActions();
     }
@@ -37,8 +43,9 @@ public class GetActionsInteractor {
     }
 
     private void getActions() throws Exception {
-        List<Action> profile = repository.getActions(userId);
-        List<ActionResponse> response = makeResponse(profile);
+        ResponseWithData<List<Action>> profile = repository.getActions(userId, activityName);
+        logRepository.writeLog(profile.logData());
+        List<ActionResponse> response = makeResponse(profile.data());
         handleSuccess(response);
     }
 

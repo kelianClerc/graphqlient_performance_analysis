@@ -1,6 +1,10 @@
 package com.applidium.graphqlientdemo.data.net.retrofit;
 
+import android.util.Log;
+
 import com.applidium.graphqlientdemo.core.boundary.UserRepository;
+import com.applidium.graphqlientdemo.core.entity.ResponseWithData;
+import com.applidium.graphqlientdemo.core.entity.ResponseWithDataBuilder;
 import com.applidium.graphqlientdemo.core.entity.User;
 import com.applidium.graphqlientdemo.core.error.exceptions.NetworkException;
 import com.applidium.graphqlientdemo.core.error.exceptions.ServerClientException;
@@ -10,43 +14,106 @@ import com.applidium.graphqlientdemo.data.net.common.RequestManager;
 import com.applidium.graphqlientdemo.data.net.retrofit.mapper.RestUserMapper;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestUserContent;
 import com.applidium.graphqlientdemo.data.net.retrofit.model.RestUsersContent;
+import com.applidium.graphqlientdemo.utils.logging.DataAnalysisListener;
+import com.applidium.graphqlientdemo.utils.logging.DataAnalyzer;
+import com.applidium.graphqlientdemo.utils.logging.InterceptorDataAnalysis;
+import com.applidium.graphqlientdemo.utils.logging.RequestType;
 import com.applidium.graphqlientdemo.utils.trace.Trace;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import retrofit2.Call;
+import retrofit2.Response;
 
 @Singleton
-public class ServiceUserRepository implements UserRepository {
+public class ServiceUserRepository implements UserRepository, DataAnalysisListener {
 
     private final GraphqldemoService service;
     private final RestUserMapper restUserMapper;
     private final RequestManager requestManager;
+    private static final Map<Double, DataAnalyzer> dataSet = new HashMap<>();
+    private final InterceptorDataAnalysis interceptorDataAnalysis;
 
     @Inject
     ServiceUserRepository(
-        GraphqldemoService service, RestUserMapper restUserMapper,
-        RestUserMapper restUserMapper1, RequestManager requestManager) {
+        GraphqldemoService service,
+        RestUserMapper restUserMapper,
+        RequestManager requestManager,
+        InterceptorDataAnalysis interceptorDataAnalysis) {
         this.service = service;
-        this.restUserMapper = restUserMapper1;
+        this.restUserMapper = restUserMapper;
         this.requestManager = requestManager;
+        this.interceptorDataAnalysis = interceptorDataAnalysis;
+        this.interceptorDataAnalysis.addListener(this);
     }
 
     @Override @Trace
-    public List<User> getUsers() throws IOException, ServerClientException, UnexpectedException, NetworkException, ServerException {
-        Call<RestUsersContent> call = service.getUsers();
-        RestUsersContent response = requestManager.tryToDoRequest(call);
-        return restUserMapper.mapList(response.users());
+    public ResponseWithData<List<User>> getUsers(String activityName) throws IOException, ServerClientException, UnexpectedException, NetworkException, ServerException {
+        DataAnalyzer log = new DataAnalyzer(RequestType.REST, activityName);
+        dataSet.put(log.getSalt(), log);
+        Log.d("GRAPHQLD", "Salt : " +log.getSalt());
+        Call<RestUsersContent> call = null;
+        call = service.getUsers(log.getSalt());
+
+        Log.d("GRAPHQLD", "Sending request");
+        Response<RestUsersContent> response = call.execute();
+        RestUsersContent responseContent = null;
+        if (response.isSuccessful()) {
+            responseContent = response.body();
+        }
+
+        Log.d("GRAPHQLD", "Request received");
+        List<User> users = restUserMapper.mapList(responseContent.users());
+        ResponseWithData<List<User>> result = new ResponseWithDataBuilder<List<User>>()
+            .data(users)
+            .logData(log)
+            .build();
+        dataSet.remove(log.getSalt());
+
+        Log.d("GRAPHQLD", "Get all users done : "+result.data().size());
+        return result;
     }
 
     @Override
-    public User getProfile(String userId) throws Exception {
-        Call<RestUserContent> call = service.getProfile(userId);
-        RestUserContent response = requestManager.tryToDoRequest(call);
-        return restUserMapper.map(response.user());
+    public ResponseWithData<User> getProfile(String userId, String activityName) throws Exception {
+        DataAnalyzer log = new DataAnalyzer(RequestType.REST, activityName);
+        dataSet.put(log.getSalt(), log);
+        Call<RestUserContent> call = service.getProfile(userId, log.getSalt());
+        Response<RestUserContent> response = call.execute();
+        RestUserContent responseContent = null;
+        if (response.isSuccessful()) {
+            responseContent = response.body();
+        }
+
+        User user = restUserMapper.map(responseContent.user());
+        ResponseWithData<User> result = new ResponseWithDataBuilder<User>()
+            .data(user)
+            .logData(log)
+            .build();
+        dataSet.remove(log.getSalt());
+        return result;
+    }
+
+    @Override
+    public void interceptSize(long length, long time, boolean isRequest, double id) {
+        DataAnalyzer dataAnalyzer = dataSet.get(id);
+
+        Log.d("GRAPHQLD", "Interceptor proc : " + length + ", isRequest : " + isRequest + ", id: " + id);
+        if (dataAnalyzer != null) {
+            if (isRequest) {
+                dataAnalyzer.measureRequestSize(length);
+                dataAnalyzer.setRequestSent(time);
+                dataAnalyzer.roundTrip();
+            } else {
+                dataAnalyzer.measureResponseSize(length);
+                dataAnalyzer.setResponseReceived(time);
+            }
+        }
     }
 }
