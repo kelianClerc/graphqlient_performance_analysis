@@ -2,6 +2,8 @@ package com.applidium.graphqlientdemo.core.interactor.actions;
 
 import com.applidium.graphqlientdemo.core.boundary.ActionRepository;
 import com.applidium.graphqlientdemo.core.entity.ActionDetail;
+import com.applidium.graphqlientdemo.core.entity.ResponseWithData;
+import com.applidium.graphqlientdemo.data.LogRepository;
 import com.applidium.graphqlientdemo.utils.threading.RunOnExecutionThread;
 import com.applidium.graphqlientdemo.utils.threading.RunOnPostExecutionThread;
 import com.applidium.graphqlientdemo.utils.trace.Trace;
@@ -13,10 +15,12 @@ public class GetActionDetailInteractor {
     private String actionId;
     private String activityName;
     private GetActionDetailListener listener;
+    private final LogRepository logRepository;
 
     @Inject
-    GetActionDetailInteractor(ActionRepository repository) {
+    GetActionDetailInteractor(ActionRepository repository, LogRepository logRepository) {
         this.repository = repository;
+        this.logRepository = logRepository;
     }
 
     @Trace
@@ -37,8 +41,9 @@ public class GetActionDetailInteractor {
     }
 
     private void getActions() throws Exception {
-        ActionDetail profile = repository.getActionDetail(actionId, activityName);
-        ActionDetailResponse response = makeResponse(profile);
+        ResponseWithData<ActionDetail> profile = repository.getActionDetail(actionId, activityName);
+        logRepository.writeLog(profile.logData());
+        ActionDetailResponse response = makeResponse(profile.data());
         handleSuccess(response);
     }
 
