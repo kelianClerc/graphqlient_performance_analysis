@@ -22,6 +22,7 @@
             />
         <activity android:name=".app.profile.ui.activity.ProfileActivity"/>
         <activity android:name=".app.actions.ui.activity.ActionDetailActivity"/>
+        <activity android:name=".app.settings.ui.activity.SettingsActivity"/>
 
         <activity-alias
             android:name=".Launcher"

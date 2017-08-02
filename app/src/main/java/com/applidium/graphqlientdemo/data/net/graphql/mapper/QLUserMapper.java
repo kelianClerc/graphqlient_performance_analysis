@@ -26,6 +26,7 @@ public class QLUserMapper implements Mapper<UserListResponse.Users,User> {
             .firstName(toMap.firstname())
             .id(toMap.id())
             .age(toMap.age())
+            .numberOfArticles(toMap.actions().size())
             .build();
     }
 

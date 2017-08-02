@@ -5,6 +5,10 @@
         name,
         firstname,
         #-type- Int
-        age
+        age,
+        #-list-;
+        actions{
+        id
+        }
     }
 }

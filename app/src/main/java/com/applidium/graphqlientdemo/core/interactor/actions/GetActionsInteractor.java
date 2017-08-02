@@ -1,6 +1,7 @@
 package com.applidium.graphqlientdemo.core.interactor.actions;
 
 import com.applidium.graphqlientdemo.core.boundary.ActionRepository;
+import com.applidium.graphqlientdemo.core.boundary.SourceRepository;
 import com.applidium.graphqlientdemo.core.entity.Action;
 import com.applidium.graphqlientdemo.core.entity.ResponseWithData;
 import com.applidium.graphqlientdemo.data.LogRepository;
@@ -12,17 +13,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class GetActionsInteractor {
-    private final ActionRepository repository;
+    private final ActionRepository restRepository;
+    private final ActionRepository graphqlRepository;
+    private final SourceRepository sourceRepository;
     private final LogRepository logRepository;
     private String userId;
     private String activityName;
     private GetActionsListener listener;
 
     @Inject
-    GetActionsInteractor(ActionRepository repository, LogRepository logRepository) {
-        this.repository = repository;
+    GetActionsInteractor(
+        @Named("rest") ActionRepository restRepository,
+        @Named("graphql") ActionRepository graphqlRepository,
+        SourceRepository sourceRepository,
+        LogRepository logRepository
+    ) {
+        this.restRepository = restRepository;
+        this.graphqlRepository = graphqlRepository;
+        this.sourceRepository = sourceRepository;
         this.logRepository = logRepository;
     }
 
@@ -43,7 +54,12 @@ public class GetActionsInteractor {
     }
 
     private void getActions() throws Exception {
-        ResponseWithData<List<Action>> profile = repository.getActions(userId, activityName);
+        ResponseWithData<List<Action>> profile = null;
+        if (sourceRepository.getSelectedSource()) {
+            profile = restRepository.getActions(userId, activityName);
+        } else {
+            profile = graphqlRepository.getActions(userId, activityName);
+        }
         logRepository.writeLog(profile.logData());
         List<ActionResponse> response = makeResponse(profile.data());
         handleSuccess(response);

@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity implements
 
     private void setupToolbar() {
         toolbar.setOnMenuItemClickListener(this);
-        toolbar.inflateMenu(R.menu.profile);
+        toolbar.inflateMenu(R.menu.settings);
     }
 
     private void setupTabLayout() {
@@ -61,8 +61,8 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.profile:
-                presenter.onProfile();
+            case R.id.settings:
+                presenter.onSettings();
                 return true;
         }
         return false;
