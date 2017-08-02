@@ -54,12 +54,15 @@ public class GetActionsInteractor {
     }
 
     private void getActions() throws Exception {
+        ResponseWithData<List<Action>> profile = null;
         if (sourceRepository.getSelectedSource()) {
-            ResponseWithData<List<Action>> profile = restRepository.getActions(userId, activityName);
-            logRepository.writeLog(profile.logData());
-            List<ActionResponse> response = makeResponse(profile.data());
-            handleSuccess(response);
+            profile = restRepository.getActions(userId, activityName);
+        } else {
+            profile = graphqlRepository.getActions(userId, activityName);
         }
+        logRepository.writeLog(profile.logData());
+        List<ActionResponse> response = makeResponse(profile.data());
+        handleSuccess(response);
     }
 
     private List<ActionResponse> makeResponse(List<Action> actions) {

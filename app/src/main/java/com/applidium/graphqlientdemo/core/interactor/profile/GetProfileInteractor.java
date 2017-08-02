@@ -52,12 +52,15 @@ public class GetProfileInteractor {
     }
 
     private void getProfile() throws Exception {
+        ResponseWithData<User> profile = null;
         if (sourceRepository.getSelectedSource()) {
-            ResponseWithData<User> profile = restRepository.getProfile(userId, activityName);
-            logRepository.writeLog(profile.logData());
-            ProfileResponse response = makeResponse(profile.data());
-            handleSuccess(response);
+            profile = restRepository.getProfile(userId, activityName);
+        } else {
+            profile = graphqlRepository.getProfile(userId, activityName);
         }
+        logRepository.writeLog(profile.logData());
+        ProfileResponse response = makeResponse(profile.data());
+        handleSuccess(response);
     }
 
     private ProfileResponse makeResponse(User users) {

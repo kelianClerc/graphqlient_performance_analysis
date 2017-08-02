@@ -56,10 +56,7 @@ public class GraphQLUserRepository implements UserRepository, DataAnalysisListen
         dataSet.put(log.getSalt(), log);
 
         UserListRequest request = new UserListRequest();
-        log.setRequestSent();
         QLResponse<UserListResponse> response = graphql.send(request);
-        log.setResponseReceived();
-        log.roundTrip();
         List<User> users = userMapper.mapList(response.getResponse().users());
         ResponseWithData<List<User>> result = new ResponseWithDataBuilder<List<User>>()
             .data(users)
@@ -74,10 +71,7 @@ public class GraphQLUserRepository implements UserRepository, DataAnalysisListen
         DataAnalyzer log = new DataAnalyzer(RequestType.GRAPHQL, activityName);
         dataSet.put(log.getSalt(), log);
         UserRequest request = new UserRequest(userId);
-        log.setRequestSent();
         QLResponse<UserResponse> response = graphql.send(request);
-        log.setResponseReceived();
-        log.roundTrip();
         User user = userMapper.mapLight(response.getResponse().user());
         ResponseWithData<User> result = new ResponseWithDataBuilder<User>()
             .data(user)

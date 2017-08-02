@@ -1,0 +1,10 @@
+query action($id:ID!) {
+  action(id:$id) {
+    #-list-
+    items {
+      name,
+      id,
+      duration
+    }
+  }
+}

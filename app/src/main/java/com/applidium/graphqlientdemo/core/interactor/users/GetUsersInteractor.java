@@ -53,12 +53,15 @@ public class GetUsersInteractor {
     }
 
     private void getUsers() throws Exception {
+        ResponseWithData<List<User>> account = null;
         if (sourceRepository.getSelectedSource()) {
-            ResponseWithData<List<User>> account = restRepository.getUsers(activityName);
-            logRepository.writeLog(account.logData());
-            List<UserResponse> response = makeResponse(account.data());
-            handleSuccess(response);
+            account = restRepository.getUsers(activityName);
+        } else {
+            account = graphqlRepository.getUsers(activityName);
         }
+        logRepository.writeLog(account.logData());
+        List<UserResponse> response = makeResponse(account.data());
+        handleSuccess(response);
     }
 
     private List<UserResponse> makeResponse(List<User> users) {

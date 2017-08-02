@@ -53,12 +53,15 @@ public class GetActionDetailInteractor {
     }
 
     private void getActions() throws Exception {
+        ResponseWithData<ActionDetail> profile = null;
         if (sourceRepository.getSelectedSource()) {
-            ResponseWithData<ActionDetail> profile = restRepository.getActionDetail(actionId, activityName);
-            logRepository.writeLog(profile.logData());
-            ActionDetailResponse response = makeResponse(profile.data());
-            handleSuccess(response);
+            profile = restRepository.getActionDetail(actionId, activityName);
+        } else {
+            profile = graphqlRepository.getActionDetail(actionId, activityName);
         }
+        logRepository.writeLog(profile.logData());
+        ActionDetailResponse response = makeResponse(profile.data());
+        handleSuccess(response);
     }
 
     private ActionDetailResponse makeResponse(ActionDetail actions) {
