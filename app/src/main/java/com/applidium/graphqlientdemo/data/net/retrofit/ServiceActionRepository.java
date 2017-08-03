@@ -94,6 +94,8 @@ public class ServiceActionRepository implements ActionRepository, DataAnalysisLi
             .data(actions)
             .logData(log)
             .build();
+
+        log.setLabel("Actions + Items for user " + userId);
         dataSet.remove(log.getSalt());
         return result;
     }
@@ -130,6 +132,8 @@ public class ServiceActionRepository implements ActionRepository, DataAnalysisLi
             .data(build)
             .logData(log)
             .build();
+
+        log.setLabel("Items for action " + actionId);
         dataSet.remove(log.getSalt());
         return result;
     }

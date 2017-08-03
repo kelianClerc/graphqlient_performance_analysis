@@ -72,6 +72,7 @@ public class GraphQLUserRepository implements UserRepository, DataAnalysisListen
             .data(users)
             .logData(log)
             .build();
+        log.setLabel("Users + Actions");
         dataSet.remove(log.getSalt());
         return result;
     }
@@ -89,6 +90,7 @@ public class GraphQLUserRepository implements UserRepository, DataAnalysisListen
             .data(user)
             .logData(log)
             .build();
+        log.setLabel("User " + userId);
         dataSet.remove(log.getSalt());
         return result;
     }

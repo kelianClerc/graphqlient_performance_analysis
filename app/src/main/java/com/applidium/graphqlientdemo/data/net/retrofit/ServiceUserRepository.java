@@ -57,26 +57,24 @@ public class ServiceUserRepository implements UserRepository, DataAnalysisListen
     public ResponseWithData<List<User>> getUsers(String activityName) throws IOException, ServerClientException, UnexpectedException, NetworkException, ServerException {
         DataAnalyzer log = new DataAnalyzer(RequestType.REST, activityName);
         dataSet.put(log.getSalt(), log);
-        Log.d("GRAPHQLD", "Salt : " +log.getSalt());
         Call<RestUsersContent> call = null;
         call = service.getUsers(log.getSalt());
 
-        Log.d("GRAPHQLD", "Sending request");
         Response<RestUsersContent> response = call.execute();
         RestUsersContent responseContent = null;
         if (response.isSuccessful()) {
             responseContent = response.body();
         }
 
-        Log.d("GRAPHQLD", "Request received");
         List<User> users = restUserMapper.mapList(responseContent.users());
         ResponseWithData<List<User>> result = new ResponseWithDataBuilder<List<User>>()
             .data(users)
             .logData(log)
             .build();
+
+        log.setLabel("Users + Actions");
         dataSet.remove(log.getSalt());
 
-        Log.d("GRAPHQLD", "Get all users done : "+result.data().size());
         return result;
     }
 
@@ -96,6 +94,8 @@ public class ServiceUserRepository implements UserRepository, DataAnalysisListen
             .data(user)
             .logData(log)
             .build();
+
+        log.setLabel("User " + userId);
         dataSet.remove(log.getSalt());
         return result;
     }

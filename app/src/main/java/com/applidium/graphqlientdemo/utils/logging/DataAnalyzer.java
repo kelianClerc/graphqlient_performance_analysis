@@ -79,4 +79,12 @@ public class DataAnalyzer {
     public double getSalt() {
         return salt;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 }
