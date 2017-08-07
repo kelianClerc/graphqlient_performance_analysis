@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style
+        name="AppTextAppearance.GillSansRegular"
+        parent="TextAppearance.AppCompat"
+        >
+        <item name="fontPath">fonts/GillSansMT.ttf</item>
+    </style>
+    <style
+        name="AppTextAppearance.GillSansBold"
+        parent="TextAppearance.AppCompat"
+        >
+        <item name="fontPath">fonts/GillSansMT-Bold.ttf</item>
+    </style>
+    <style
+        name="AppTextAppearance.GillSansItalic"
+        parent="TextAppearance.AppCompat"
+        >
+        <item name="fontPath">fonts/GillSansMT-Italic.ttf</item>
+    </style>
+    <style
+        name="AppTextAppearance.GillSansBoldItalic"
+        parent="TextAppearance.AppCompat"
+        >
+        <item name="fontPath">fonts/GillSansMT-BoldItalic.ttf</item>
+    </style>
+    <style
+        name="AppTextAppearance.GeorgiaItalic"
+        parent="TextAppearance.AppCompat"
+        >
+        <item name="fontPath">fonts/Georgia-Italic.ttf</item>
+    </style>
+</resources>

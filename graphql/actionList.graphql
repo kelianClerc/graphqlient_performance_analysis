@@ -1,0 +1,11 @@
+query actionList($id:ID!) {
+  #-list-;
+  actions(user_id:$id) {
+    id,
+    title,
+    #-list-;
+    items {
+      name
+    }
+  }
+}

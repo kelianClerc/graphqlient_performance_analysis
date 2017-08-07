@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style
+        name="AppTextAppearance.BigTitle"
+        parent="AppTextAppearance.GillSansRegular"
+        >
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/mine_shaft</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <style
+        name="AppTextAppearance.Title"
+        parent="AppTextAppearance.GillSansRegular"
+        >
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/mine_shaft</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <style
+        name="AppTextAppearance.SmallTitle"
+        parent="AppTextAppearance.GillSansRegular"
+        >
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/eastern_blue</item>
+    </style>
+    <style
+        name="AppTextAppearance.Normal"
+        parent="AppTextAppearance.GillSansRegular"
+        >
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/mine_shaft</item>
+    </style>
+    <style
+        name="AppTextAppearance.Subtitle"
+        parent="AppTextAppearance.GeorgiaItalic"
+        >
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/mine_shaft</item>
+    </style>
+    <style
+        name="AppTextAppearance.Legend"
+        parent="AppTextAppearance.GillSansRegular"
+        >
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/dust_gray</item>
+    </style>
+</resources>

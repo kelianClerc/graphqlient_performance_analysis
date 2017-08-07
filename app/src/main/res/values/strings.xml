@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="generic_error_message">Une erreur est survenue.</string>
+    <string name="error_unreachable_service_message">"Serveur injoignable. Vérifiez votre connexion."</string>
+    <string name="error_unavailable_service_message">"Serveur indisponible. Réessayer dans un instant."</string>
+    <string name="show_profile">Show profile</string>
+    <string name="age_label">%1$s ans</string>
+    <string name="actions_label">%1$s actions</string>
+    <string name="item_duration">%1$s s</string>
+    <string name="items_label">%1$s items</string>
+</resources>
