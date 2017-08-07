@@ -43,6 +43,12 @@ public class MainActivity extends BaseActivity implements
         setupTabLayout();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.onUserList();
+    }
+
     private void setupView() {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

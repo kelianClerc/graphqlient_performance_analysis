@@ -30,7 +30,7 @@ public class ActionViewModelMapper implements Mapper<ActionResponse, ActionViewM
         return new ActionViewModelBuilder()
             .id(toMap.id())
             .articleName(toMap.title())
-            .numberOfItems(context.getString(R.string.actions_label, String.valueOf(toMap.numberOfSteps())))
+            .numberOfItems(context.getString(R.string.items_label, String.valueOf(toMap.numberOfSteps())))
             .lastItemTitle(toMap.lastActionName())
             .lastItemDuration(String.valueOf(toMap.duration()) + "secondes")
             .isDone(toMap.isDone())
